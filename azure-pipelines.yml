@@ -105,12 +105,13 @@ stages:
             displayName: get host suffix
             inputs:
               azureSubscription: '$(azureConnection)'
-              scriptType: 'bash'
+              scriptType: 'pscore'
               scriptLocation: 'inlineScript'
               inlineScript: |
                 $clusterId="/subscriptions/93ddb8b3-ddb9-4d1c-ba59-421456e65538/resourcegroups/rg-phippyaks-demo/providers/Microsoft.ContainerService/managedClusters/aks-phippyaksdemo"
-                $resourceGroupName=$(cut -d '/' -f5 <<< "$clusterId")
-                $clusterName=$(cut -d '/' -f9 <<< "$clusterId")
+                #$resourceGroupName=$(cut -d '/' -f5 <<< "$clusterId")
+                $resourceGroupName=($clusterId -split '/')[4]
+                $clusterName=($clusterId -split '/')[8]
                 az aks use-dev-spaces -n $clusterName -g $resourceGroupName -s dev -y
                 $hostSuffix=$(azds show-context -o json | ConvertFrom-Json).controller.hostSuffix
                 echo "##vso[task.setvariable variable=HostSuffix]$hostSuffix"

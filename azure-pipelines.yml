@@ -114,9 +114,8 @@ stages:
                 #$clusterName=$(cut -d '/' -f9 <<< "$clusterId")
                 $clusterName=($clusterId -split '/')[8]
                 az aks use-dev-spaces -n $clusterName -g $resourceGroupName -s dev -y
-                $hostSuffix=$(azds show-context -o json | ConvertFrom-Json).controller.hostSuffix
-                write-host $hostSuffix
-                $hostSuffix=$hostSuffix -replace '[^a-zA-Z0-9]', ''
+                $hostSuffix=$(azds show-context -o json | ConvertFrom-Json).hostSuffix
+                write-host "Host suffix: $hostSuffix "
                 echo "##vso[task.setvariable variable=HostSuffix]$hostSuffix"
 
           - task: KubernetesManifest@0

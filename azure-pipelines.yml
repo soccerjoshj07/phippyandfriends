@@ -14,7 +14,7 @@ variables:
   dockerRegistryServiceConnection: 'b082a429-449c-4d55-9b39-98a5a1185be6'
   imageRepository: 'soccerjoshjphippyandfriends'
   containerRegistry: 'aciphippyaksdemo.azurecr.io'
-  dockerfilePath: '**/Dockerfile'
+  dockerfilePath: 'Dockerfile'
   tag: '$(Build.BuildId)'
   imagePullSecret: 'aciphippyaksdemo8724f0cd-auth'
 
@@ -29,8 +29,8 @@ variables:
 
   # K8s template
   helmVersion: 3.0.2
-  projectName: captainkube
-  imageName: captainkube
+  projectName: parrot
+  imageName: parrot
   #imageTag: $(tag)
   helmChartVersion: $(build.buildid)
 

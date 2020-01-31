@@ -104,9 +104,9 @@ stages:
           - task: AzureCLI@2
             displayName: get host suffix
             inputs:
-              scriptType: pscore
-              scriptLocation: inlineScript
-              azureSubscription: $(azureConnection)
+              azureSubscription: '$(azureConnection)'
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
               inlineScript: |
                 $clusterId="/subscriptions/93ddb8b3-ddb9-4d1c-ba59-421456e65538/resourcegroups/rg-phippyaks-demo/providers/Microsoft.ContainerService/managedClusters/aks-phippyaksdemo"
                 $resourceGroupName=$(cut -d '/' -f5 <<< "$clusterId")

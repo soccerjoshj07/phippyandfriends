@@ -62,6 +62,7 @@ stages:
         command: 'package'
         chartPath: 'charts/$(projectName)'
         chartVersion: '$(tag)'
+        save: false
         arguments: '--app-version $(tag)'
 
     - task: AzureCLI@2

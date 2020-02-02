@@ -143,7 +143,7 @@ stages:
               namespace: 'dev'
               command: 'upgrade'
               chartType: 'Name'
-              chartName: 'parrot'
+              chartName: 'charts/$(projectName)'
 
   - deployment: DeployPullRequest
     displayName: Deploy Pull request

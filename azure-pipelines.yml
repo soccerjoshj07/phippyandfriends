@@ -65,6 +65,7 @@ stages:
         chartVersion: '$(tag)'
         save: false
         arguments: '--app-version $(tag)'
+      displayName: helm package
 
     - task: AzureCLI@2
       inputs:
@@ -73,7 +74,7 @@ stages:
         scriptLocation: 'inlineScript'
         inlineScript: |
           cd $(projectName)
-          chartPackage=$(ls $(projectName)-*.tgz)
+          chartPackage=$(ls $(projectName)-$(tag).tgz)
           az acr helm push -n $(registryName) $chartPackage
           echo $(jq -n --arg version "$(helmChartVersion)" '{helmChartVersion: $version}') > $(build.artifactStagingDirectory)/variables.json
       displayName: 'az acr helm push'

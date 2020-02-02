@@ -74,7 +74,7 @@ stages:
         scriptLocation: 'inlineScript'
         inlineScript: |
           chartPackage=$(ls $(build.artifactstagingdirectory)/$(projectName)-$(tag).tgz)
-          az acr helm push -n $(containerRegistry) $chartPackage
+          az acr helm push -n aciphippyaksdemov2 $chartPackage
           echo $(jq -n --arg version "$(helmChartVersion)" '{helmChartVersion: $version}') > $(build.artifactStagingDirectory)/variables.json
       displayName: 'az acr helm push'
 

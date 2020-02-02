@@ -28,8 +28,11 @@ We will leverage Azure Kubernetes Service (AKS). For that, you can run the comma
 
 ```bash
 # Setup of the AKS cluster
-$ latestK8sVersion=$(az aks get-versions -l $LOCATION --query 'orchestrators[-1].orchestratorVersion' -o tsv)
-$ az aks create -l $LOCATION -n $NAME -g $RG --generate-ssh-keys -k $latestK8sVersion -s Standard_B2s
+### latest version = preview, so not passing that in.
+#$ latestK8sVersion=$(az aks get-versions -l $LOCATION --query 'orchestrators[-1].orchestratorVersion' -o tsv)
+#$ az aks create -l $LOCATION -n $NAME -g $RG --generate-ssh-keys -k $latestK8sVersion -s Standard_B2s
+###
+$ az aks create -l $LOCATION -n $NAME -g $RG --generate-ssh-keys -s Standard_B2s
 # Once created (the creation could take ~10 min), get the credentials to interact with your AKS cluster
 $ az aks get-credentials -n $NAME -g $RG
 # Setup the phippyandfriends namespace, you will deploy later some apps into it

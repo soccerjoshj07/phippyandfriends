@@ -14,7 +14,7 @@ variables:
   dockerRegistryServiceConnection: '5bc3654e-7f62-4693-9876-d909a68ac882'
   imageRepository: 'soccerjoshjphippyandfriendsv2'
   containerRegistry: 'aciphippyaksdemov2.azurecr.io'
-  dockerfilePath: 'parrot/Dockerfile'
+  dockerfilePath: 'Dockerfile'
   tag: '$(Build.BuildNumber)'
   imagePullSecret: 'aciphippyaksdemov25520-auth'
 
@@ -26,6 +26,13 @@ variables:
   
   # Name of the new namespace being created to deploy the PR changes.
   k8sNamespaceForPR: '$(system.pullRequest.sourceBranch)'
+
+  # K8s template
+  helmVersion: 3.0.2
+  projectName: parrot
+  imageName: parrot
+  #imageTag: $(tag)
+  helmChartVersion: $(build.buildNumber)
 
 stages:
 - stage: Build
@@ -41,10 +48,33 @@ stages:
       inputs:
         command: buildAndPush
         repository: $(imageRepository)
-        dockerfile: $(dockerfilePath)
+        dockerfile: $(projectName)/$(dockerfilePath)
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
+
+    - task: HelmInstaller@1
+      inputs:
+        helmVersionToInstall: $(helmVersion)
+
+    - task: HelmDeploy@0
+      inputs:
+        command: 'package'
+        chartPath: '$(projectName)/charts/$(projectName)'
+        chartVersion: '$(tag)'
+        save: false
+        arguments: '--app-version $(tag)'
+
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: 'Visual Studio Enterprise – MPN(93ddb8b3-ddb9-4d1c-ba59-421456e65538)'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          cd $(projectName)
+          chartPackage=$(ls $(projectName)-*.tgz)
+          az acr helm push -n $(registryName) $chartPackage
+          echo $(jq -n --arg version "$(helmChartVersion)" '{helmChartVersion: $version}') > $(build.artifactStagingDirectory)/variables.json
           
     - upload: charts
       artifact: charts
@@ -79,8 +109,8 @@ stages:
               azureSubscription: $(azureConnection)
               inlineScript: |
                 $clusterId="/subscriptions/93ddb8b3-ddb9-4d1c-ba59-421456e65538/resourcegroups/rg-phippyaks-demo-v2/providers/Microsoft.ContainerService/managedClusters/aks-phippyaksdemo-v2"
-                $resourceGroupName=$(cut -d '/' -f5 <<< "$clusterId")
-                $clusterName=$(cut -d '/' -f9 <<< "$clusterId")
+                $resourceGroupName=($clusterId -split '/')[4]
+                $clusterName=($clusterId -split '/')[8]
                 az aks use-dev-spaces -n $clusterName -g $resourceGroupName -s dev -y
                 $hostSuffix=$(azds show-context -o json | ConvertFrom-Json).controller.hostSuffix
                 echo "##vso[task.setvariable variable=HostSuffix]$hostSuffix"

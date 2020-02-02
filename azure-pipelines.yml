@@ -64,19 +64,8 @@ stages:
         chartPath: '$(projectName)/charts/$(projectName)'
         chartVersion: '$(tag)'
         save: false
-        arguments: '--app-version $(tag)'
+        arguments: '--app-version $(tag) --destination charts/$(projectName)'
       displayName: helm package
-
-    - task: AzureCLI@2
-      inputs:
-        azureSubscription: 'Visual Studio Enterprise – MPN(93ddb8b3-ddb9-4d1c-ba59-421456e65538)'
-        scriptType: 'bash'
-        scriptLocation: 'inlineScript'
-        inlineScript: |
-          chartPackage=$(ls $(build.artifactstagingdirectory)/$(projectName)-$(tag).tgz)
-          az acr helm push -n aciphippyaksdemov2 $chartPackage
-          echo $(jq -n --arg version "$(helmChartVersion)" '{helmChartVersion: $version}') > $(build.artifactStagingDirectory)/variables.json
-      displayName: 'az acr helm push'
 
     - upload: charts
       artifact: charts

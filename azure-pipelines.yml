@@ -14,7 +14,7 @@ variables:
   dockerRegistryServiceConnection: '5bc3654e-7f62-4693-9876-d909a68ac882'
   imageRepository: 'soccerjoshjphippyandfriendsv2'
   containerRegistry: 'aciphippyaksdemov2.azurecr.io'
-  dockerfilePath: 'Parrot/Dockerfile'
+  dockerfilePath: 'parrot/Dockerfile'
   tag: '$(Build.BuildNumber)'
   imagePullSecret: 'aciphippyaksdemov25520-auth'
 

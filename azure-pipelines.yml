@@ -33,6 +33,7 @@ variables:
   imageName: parrot
   #imageTag: $(tag)
   helmChartVersion: $(build.buildNumber)
+  registryName: soccerjoshjhelmv2
 
 stages:
 - stage: Build
@@ -137,6 +138,22 @@ stages:
                 $(imagePullSecret)
               containers: |
                 $(containerRegistry)/$(imageRepository):$(tag)
+
+          - task: HelmInstaller@1
+            inputs:
+              helmVersionToInstall: $(helmVersion)
+
+
+          - task: HelmDeploy@0
+            inputs:
+              connectionType: 'Azure Resource Manager'
+              azureSubscription: 'Visual Studio Enterprise – MPN (93ddb8b3-ddb9-4d1c-ba59-421456e65538)'
+              azureResourceGroup: 'rg-phippyaks-demo-v2'
+              kubernetesCluster: 'aks-phippyaksdemo-v2'
+              namespace: 'dev'
+              command: 'upgrade'
+              chartType: 'Name'
+              chartName: 'parrot'
 
   - deployment: DeployPullRequest
     displayName: Deploy Pull request

@@ -142,8 +142,8 @@ stages:
               kubernetesCluster: 'aks-phippyaksdemo-v2'
               namespace: 'dev'
               command: 'upgrade'
-              chartType: 'Name'
-              chartName: 'charts/$(projectName)'
+              chartType: 'FilePath'
+              chartPath: 'charts/$(projectName)'
 
   - deployment: DeployPullRequest
     displayName: Deploy Pull request

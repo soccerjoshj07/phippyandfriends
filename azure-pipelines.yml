@@ -107,9 +107,8 @@ stages:
             inputs:
               action: bake
               renderType: helm2
-              releaseName: ${{ s.serviceName }}-${{ parameters.environment }}
-              helmChart: $(Build.SourcesDirectory)/Deploy/helm/${{ s.serviceName }}
-              overrideFiles: $(Build.SourcesDirectory)/Deploy/helm/__values/values.yml
+              releaseName: $(namespace)-website
+              helmChart: $(Pipeline.Workspace)/charts
               overrides: |
                 ingress.enabled=false
                 image.repository=$(containerRegistry)/$(imageRepository)
@@ -118,5 +117,5 @@ stages:
           - task: KubernetesManifest@0
             displayName: Deploy $(projectName) to k8s
             inputs:
-              manifests: $(bake_${{ s.serviceShortName }}.manifestsBundle)
+              manifests: $(bake_$(projectName).manifestsBundle)
               imagePullSecrets: $(imagePullSecret)

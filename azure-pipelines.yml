@@ -148,7 +148,7 @@ stages:
               command: 'upgrade'
               chartType: 'FilePath'
               chartPath: '$(Pipeline.Workspace)/charts/$(projectName)/$(projectName)-$(tag).tgz'
-              releaseName: 'parrot-$(build.buildnumber)'
+              releaseName: 'parrot-$(build.buildid)'
 
   - deployment: DeployPullRequest
     displayName: Deploy Pull request

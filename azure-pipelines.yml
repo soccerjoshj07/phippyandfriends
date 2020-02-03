@@ -43,12 +43,25 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
+
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)-phippy
+        dockerfile: phippy/$(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
           
     - publish: manifests
       artifact: manifests
 
     - publish: $(projectName)/charts/$(projectName)
       artifact: charts
+
+    - publish: phippy/charts/phippy
+      artifact: phippycharts
 
 - stage: Deploy
   displayName: Deploy stage
@@ -120,4 +133,23 @@ stages:
             displayName: Deploy ${{ variables.projectName }} to k8s
             inputs:
               manifests: $(bake_${{ variables.projectName }}.manifestsBundle)
+              imagePullSecrets: $(imagePullSecret)
+
+          - task: KubernetesManifest@0
+            displayName: Bake $(projectName) manifest
+            name: bake_phippy
+            inputs:
+              action: 'bake'
+              namespace: '$(namespace)'
+              helmChart: '$(Pipeline.Workspace)/phippycharts'
+              releaseName: 'phippy-website'
+              overrides: |
+                ingress.enabled:false
+                image.repository:$(containerRegistry)/$(imageRepository)-phippy
+                image.tag:$(tag)
+            
+          - task: KubernetesManifest@0
+            displayName: Deploy phippy to k8s
+            inputs:
+              manifests: $(bake_phippy.manifestsBundle)
               imagePullSecrets: $(imagePullSecret)

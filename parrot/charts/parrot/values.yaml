@@ -7,4 +7,4 @@ service:
   externalPort: 80
 ingress:
   enabled: true
-  basedomain: 55b6c64054d54d848135.eastus2.aksapp.io # replace with your own from the portal
+  basedomain: 4797c730d12144e5bdb0.eastus2.aksapp.io # replace with your own from the portal

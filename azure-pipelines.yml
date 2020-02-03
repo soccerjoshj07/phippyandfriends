@@ -23,6 +23,7 @@ variables:
   
   # project
   projectName: parrot
+  namesspace: phippyandfriends
 
 stages:
 - stage: Build
@@ -95,4 +96,5 @@ stages:
               command: 'upgrade'
               chartType: 'FilePath'
               chartPath: '$(Pipeline.Workspace)/charts'
+              releaseName: '$(namespace)-website'
               overrideValues: 'ingress.enabled=false'

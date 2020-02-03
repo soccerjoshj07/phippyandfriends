@@ -110,9 +110,10 @@ stages:
               overrides: |
                 ingress.enabled=false
                 image.repository=$(containerRegistry)/$(imageRepository)
-                image.tag=$(tag
+                image.tag=$(tag)
 
-
+          - script: ls -a $(Pipeline.Workspace)/charts
+          - script: ls -a 
             
           
           - task: KubernetesManifest@0

@@ -115,6 +115,7 @@ stages:
                 ingress.enabled=false
                 image.repository=$(containerRegistry)/$(imageRepository)
                 image.tag=$(tag)
+                ingress.enabled=false
 
           - script: ls -a $(Pipeline.Workspace)/charts
           - script: ls -a 

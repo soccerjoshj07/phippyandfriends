@@ -65,7 +65,7 @@ stages:
     - task: HelmDeploy@0
       inputs:
         command: 'package'
-        chartPath: '$(projectName)/charts/$(projectName)'
+        chartPath: '$(projectName)/charts/$(projectName)/$(projectName)-$(tag).tgz'
         chartVersion: '$(tag)'
         save: false
         arguments: '--app-version $(tag) --destination charts/$(projectName)'

@@ -97,5 +97,6 @@ stages:
               chartType: 'FilePath'
               chartPath: '$(Pipeline.Workspace)/charts'
               releaseName: '$(namespace)-website-$(build.buildid)'
-              overrideValues: 'ingress.enabled=false, --set image.repository=$(containerRegistry)/$(imageRepository):$(tag)'
+              overrideValues: 'ingress.enabled=false, --set image.repository=$(containerRegistry)/$(imageRepository)'
               force: true
+              arguments: '--version $(tag)'

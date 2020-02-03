@@ -104,6 +104,8 @@ stages:
 
 
           - task: KubernetesManifest@0
+            displayName: Bake $(projectName) manifest
+            name: bake_$(projectName)
             inputs:
               action: 'bake'
               helmChart: '$(Pipeline.Workspace)/charts'

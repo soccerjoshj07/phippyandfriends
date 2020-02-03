@@ -15,7 +15,7 @@ variables:
   imageRepository: 'soccerjoshjphippyandfriends'
   containerRegistry: 'aciphippyaksdemo.azurecr.io'
   dockerfilePath: 'Dockerfile'
-  tag: '$(Build.BuildID)'
+  tag: '$(Build.BuildNumber)'
   imagePullSecret: 'aciphippyaksdemo11879e66-auth'
 
   # Agent VM image name
@@ -96,7 +96,6 @@ stages:
               command: 'upgrade'
               chartType: 'FilePath'
               chartPath: '$(Pipeline.Workspace)/charts'
-              releaseName: '$(namespace)-website-$(build.buildid)'
-              overrideValues: 'ingress.enabled=false, --set image.repository=$(containerRegistry)/$(imageRepository)'
+              releaseName: '$(namespace)-website'
+              overrideValues: 'ingress.enabled=false, image.repository=$(containerRegistry)/$(imageRepository), image.tag=$(tag)'
               force: true
-              arguments: '--version $(tag)'

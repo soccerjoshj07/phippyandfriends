@@ -94,5 +94,5 @@ stages:
               namespace: 'phippyandfriends'
               command: 'upgrade'
               chartType: 'FilePath'
-              chartPath: '$(Pipeline.Workspace)/charts/$(projectName)/charts/$(projectName)'
+              chartPath: '$(Pipeline.Workspace)/charts'
               overrideValues: 'ingress.enabled=false'

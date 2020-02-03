@@ -107,7 +107,6 @@ stages:
             inputs:
               action: 'bake'
               helmChart: '$(Pipeline.Workspace)/charts'
-              releaseName: '$(namespace)-website'
               overrides: |
                 ingress.enabled=false
                 image.repository=$(containerRegistry)/$(imageRepository)

@@ -1,0 +1,16 @@
+apiVersion : apps/v1beta1
+kind: Deployment
+metadata:
+  name: soccerjoshjphippyandfriends 
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: soccerjoshjphippyandfriends 
+    spec:
+      containers:
+        - name: soccerjoshjphippyandfriends 
+          image: aciphippyaksdemo.azurecr.io/soccerjoshjphippyandfriends
+          ports:
+          - containerPort: 80

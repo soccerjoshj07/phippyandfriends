@@ -81,7 +81,10 @@ stages:
 #                $(imagePullSecret)
 #              containers: |
 #                $(containerRegistry)/$(imageRepository):$(tag)
-
+          - task: HelmInstaller@1
+            inputs:
+              helmVersionToInstall: 'latest'
+          
           - task: HelmDeploy@0
             inputs:
               connectionType: 'Azure Resource Manager'

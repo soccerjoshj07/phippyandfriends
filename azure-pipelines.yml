@@ -23,7 +23,7 @@ variables:
   
   # project
   projectName: parrot
-  namesspace: phippyandfriends
+  namespace: phippyandfriends
 
 stages:
 - stage: Build

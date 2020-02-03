@@ -15,7 +15,7 @@ variables:
   imageRepository: 'soccerjoshjphippyandfriends'
   containerRegistry: 'aciphippyaksdemo.azurecr.io'
   dockerfilePath: 'Dockerfile'
-  tag: '$(Build.BuildNumber)'
+  tag: '$(Build.BuildID)'
   imagePullSecret: 'aciphippyaksdemo11879e66-auth'
 
   # Agent VM image name

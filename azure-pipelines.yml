@@ -68,7 +68,7 @@ stages:
         chartPath: '$(projectName)/charts/$(projectName)'
         chartVersion: '$(tag)'
         save: false
-        arguments: '--app-version $(tag) --destination charts/$(projectName)'
+        arguments: '--app-version $(tag) --destination $(Pipeline.Workspace)/charts/$(projectName)'
       displayName: helm package
 
     - upload: charts

@@ -87,17 +87,36 @@ stages:
           - task: HelmInstaller@1
             inputs:
               helmVersionToInstall: 'latest'
-          
-          - task: HelmDeploy@0
+
+          # - task: HelmDeploy@0
+          #   inputs:
+          #     connectionType: 'Azure Resource Manager'
+          #     azureSubscription: 'Visual Studio Enterprise – MPN (93ddb8b3-ddb9-4d1c-ba59-421456e65538)'
+          #     azureResourceGroup: 'rg-phippyaks-demo2'
+          #     kubernetesCluster: 'aks-phippyaksdemo'
+          #     namespace: 'phippyandfriends'
+          #     command: 'upgrade'
+          #     chartType: 'FilePath'
+          #     chartPath: '$(Pipeline.Workspace)/charts'
+          #     releaseName: '$(namespace)-website'
+          #     overrideValues: 'ingress.enabled=false,image.repository=$(containerRegistry)/$(imageRepository),image.tag=$(tag)'
+          #     waitForExecution: false
+
+          - task: KubernetesManifest@0
+            displayName: Bake $(projectName) manifest
             inputs:
-              connectionType: 'Azure Resource Manager'
-              azureSubscription: 'Visual Studio Enterprise – MPN (93ddb8b3-ddb9-4d1c-ba59-421456e65538)'
-              azureResourceGroup: 'rg-phippyaks-demo2'
-              kubernetesCluster: 'aks-phippyaksdemo'
-              namespace: 'phippyandfriends'
-              command: 'upgrade'
-              chartType: 'FilePath'
-              chartPath: '$(Pipeline.Workspace)/charts'
-              releaseName: '$(namespace)-website'
-              overrideValues: 'ingress.enabled=false,image.repository=$(containerRegistry)/$(imageRepository),image.tag=$(tag)'
-              waitForExecution: false
+              action: bake
+              renderType: helm2
+              releaseName: ${{ s.serviceName }}-${{ parameters.environment }}
+              helmChart: $(Build.SourcesDirectory)/Deploy/helm/${{ s.serviceName }}
+              overrideFiles: $(Build.SourcesDirectory)/Deploy/helm/__values/values.yml
+              overrides: |
+                ingress.enabled=false
+                image.repository=$(containerRegistry)/$(imageRepository)
+                image.tag=$(tag)
+          
+          - task: KubernetesManifest@0
+            displayName: Deploy $(projectName) to k8s
+            inputs:
+              manifests: $(bake_${{ s.serviceShortName }}.manifestsBundle)
+              imagePullSecrets: $(imagePullSecret)

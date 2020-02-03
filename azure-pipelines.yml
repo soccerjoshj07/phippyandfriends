@@ -112,14 +112,10 @@ stages:
               helmChart: '$(Pipeline.Workspace)/charts'
               releaseName: '$(namespace)-website'
               overrides: |
-                ingress.enabled=false
-                image.repository=$(containerRegistry)/$(imageRepository)
-                image.tag=$(tag)
-
-          - script: ls -a $(Pipeline.Workspace)/charts
-          - script: ls -a 
+                ingress.enabled:false
+                image.repository:$(containerRegistry)/$(imageRepository)
+                image.tag:$(tag)
             
-          
           - task: KubernetesManifest@0
             displayName: Deploy ${{ variables.projectName }} to k8s
             inputs:

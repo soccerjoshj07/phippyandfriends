@@ -68,7 +68,7 @@ stages:
         chartPath: '$(projectName)/charts/$(projectName)'
         chartVersion: '$(tag)'
         save: false
-        arguments: '--app-version $(tag) --destination $(Pipeline.Workspace)/charts/$(projectName)'
+        arguments: '--app-version $(tag) --destination charts/$(projectName)'
       displayName: helm package
 
     - upload: charts
@@ -147,7 +147,7 @@ stages:
               namespace: 'dev'
               command: 'upgrade'
               chartType: 'FilePath'
-              chartPath: 'charts/$(projectName)'
+              chartPath: '$(Pipeline.Workspace)/charts/$(projectName)'
 
   - deployment: DeployPullRequest
     displayName: Deploy Pull request

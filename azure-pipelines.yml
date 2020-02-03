@@ -102,17 +102,19 @@ stages:
           #     overrideValues: 'ingress.enabled=false,image.repository=$(containerRegistry)/$(imageRepository),image.tag=$(tag)'
           #     waitForExecution: false
 
+
           - task: KubernetesManifest@0
-            displayName: Bake $(projectName) manifest
             inputs:
-              action: bake
-              renderType: helm2
-              releaseName: $(namespace)-website
-              helmChart: $(Pipeline.Workspace)/charts
+              action: 'bake'
+              helmChart: '$(Pipeline.Workspace)/charts'
+              releaseName: '$(namespace)-website'
               overrides: |
                 ingress.enabled=false
                 image.repository=$(containerRegistry)/$(imageRepository)
-                image.tag=$(tag)
+                image.tag=$(tag
+
+
+            
           
           - task: KubernetesManifest@0
             displayName: Deploy $(projectName) to k8s

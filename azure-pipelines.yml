@@ -47,7 +47,7 @@ stages:
     - upload: manifests
       artifact: manifests
 
-    - upload: 
+    - upload: $(projectName)/charts/$(projectName)
       artifact: charts
 
 - stage: Deploy

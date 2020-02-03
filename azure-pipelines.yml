@@ -14,12 +14,15 @@ variables:
   dockerRegistryServiceConnection: 'e113c49e-ecfe-4413-a6e3-efe82692721c'
   imageRepository: 'soccerjoshjphippyandfriends'
   containerRegistry: 'aciphippyaksdemo.azurecr.io'
-  dockerfilePath: '**/Dockerfile'
+  dockerfilePath: 'Dockerfile'
   tag: '$(Build.BuildId)'
   imagePullSecret: 'aciphippyaksdemo2710c7ee-auth'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
+
+  # project vars
+  projectName: parrot
   
 
 stages:
@@ -36,7 +39,7 @@ stages:
       inputs:
         command: buildAndPush
         repository: $(imageRepository)
-        dockerfile: $(dockerfilePath)
+        dockerfile: $(projectName)/$(dockerfilePath)
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)

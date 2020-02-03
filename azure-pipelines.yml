@@ -119,7 +119,7 @@ stages:
             
           
           - task: KubernetesManifest@0
-            displayName: Deploy $(projectName) to k8s
+            displayName: Deploy ${{ variables.projectName }} to k8s
             inputs:
-              manifests: $(bake_$(projectName).manifestsBundle)
+              manifests: $(bake_${{ variables.projectName }}.manifestsBundle)
               imagePullSecrets: $(imagePullSecret)

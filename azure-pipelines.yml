@@ -34,6 +34,17 @@ stages:
     pool:
       vmImage: $(vmImageName)
     steps:
+
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)-captainkube
+        dockerfile: captainkube/$(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
     - task: Docker@2
       displayName: Build and push an image to container registry
       inputs:
@@ -56,6 +67,9 @@ stages:
           
     - publish: manifests
       artifact: manifests
+
+    - publish: captainkube/charts/captainkube
+      artifact: captainkubecharts
 
     - publish: $(projectName)/charts/$(projectName)
       artifact: charts
@@ -136,7 +150,7 @@ stages:
               imagePullSecrets: $(imagePullSecret)
 
           - task: KubernetesManifest@0
-            displayName: Bake $(projectName) manifest
+            displayName: Bake phippy manifest
             name: bake_phippy
             inputs:
               action: 'bake'
@@ -152,4 +166,23 @@ stages:
             displayName: Deploy phippy to k8s
             inputs:
               manifests: $(bake_phippy.manifestsBundle)
+              imagePullSecrets: $(imagePullSecret)
+
+          - task: KubernetesManifest@0
+            displayName: Bake captainkube manifest
+            name: bake_captainkube
+            inputs:
+              action: 'bake'
+              namespace: '$(namespace)'
+              helmChart: '$(Pipeline.Workspace)/captainkube'
+              releaseName: 'captainkube-website'
+              overrides: |
+                ingress.enabled:false
+                image.repository:$(containerRegistry)/$(imageRepository)-captainkube
+                image.tag:$(tag)
+            
+          - task: KubernetesManifest@0
+            displayName: Deploy captainkube to k8s
+            inputs:
+              manifests: $(bake_captainkube.manifestsBundle)
               imagePullSecrets: $(imagePullSecret)

@@ -8,8 +8,9 @@ trigger:
 resources:
   repositories:
   - repository: templates
-    name: 'PartsUnlimited/pipeline-templates'
-    type: git
+    name: 'soccerjoshj07/pipeline-templates'
+    type: github
+    endpoint: soccerjoshj07
 
 variables:
 

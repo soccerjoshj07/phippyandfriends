@@ -50,9 +50,9 @@ stages:
           imageRepository: $(imageRepository)-phippy
           projectPath: phippy
           skip: false
-        - serviceName: nodebrandy
-          imageRepository: $(imageRepository)-nodebrandy
-          projectPath: nodebrandy
+        - serviceName: nodebrady
+          imageRepository: $(imageRepository)-nodebrady
+          projectPath: nodebrady
           skip: false
 
 - stage: Deploy
@@ -81,8 +81,8 @@ stages:
           imageRepository: $(imageRepository)-phippy
           skip: false
           ingress.enabled: false 
-        - serviceName: nodebrandy
-          imageRepository: $(imageRepository)-nodebrandy
+        - serviceName: nodebrady
+          imageRepository: $(imageRepository)-nodebrady
           skip: false
           ingress.enabled: false 
 

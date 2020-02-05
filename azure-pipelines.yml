@@ -90,7 +90,7 @@ stages:
     parameters:
       imagePullSecret: $(imagePullSecret)
       dockerRegistryServiceConnection: $(dockerRegistryServiceConnection)
-      containerRegistry: (containerRegistry)
+      containerRegistry: $(containerRegistry)
       imageRepository: $(imageRepository)
       tag: $(tag)
       environment: $(environment)

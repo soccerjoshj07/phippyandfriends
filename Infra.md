@@ -6,7 +6,7 @@ Set up the environment variables the scripts below will use
 
 ```bash
 LOCATION=EastUS2
-RG=rg-phippyaks-demo
+RG=rg-phippyaks-demo2
 ACR=aciphippyaksdemo
 NAME=aks-phippyaksdemo
 ```
@@ -58,3 +58,7 @@ $ aksSpPassword=$(az ad sp create-for-rbac -n $aks-deploy --scopes $AKS_ID --rol
 # Important note: you will need this aksSpPassword value later in this blog article in the Create a Release pipeline section
 $ echo $aksSpPassword
 ```
+helm upgrade --namespace phippyandfriends --install --force --set ingress.enabled=false,image.repository=aciphippyaksdemo.azurecr.io/soccerjoshjphippyandfriends,image.tag=20200203.19 --wait phippyandfriends-website ~/Repos/phippyandfriends/parrot/charts/parrot
+
+
+helm template /home/vsts/work/1/charts --namespace phippyandfriends --set ingress.enabled=false= --set image.repository=aciphippyaksdemo.azurecr.io/soccerjoshjphippyandfriends= --set image.tag=20200203.24

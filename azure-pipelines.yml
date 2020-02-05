@@ -21,14 +21,13 @@ variables:
   tag: '$(Build.BuildNumber)'
   imagePullSecret: 'aciphippyaksdemo11879e66-auth'
   environment: soccerjoshj07phippyandfriends.phippyandfriends
-
+  namespace: phippyandfriends
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
   
 
   # project
   projectName: parrot
-  namespace: phippyandfriends
 
 stages:
 - stage: Build
@@ -95,6 +94,7 @@ stages:
       imageRepository: $(imageRepository)
       tag: $(tag)
       environment: $(environment)
+      namespace: $(namespace)
       services:
         - serviceName: captainkube
           imageRepo: $(imageRepository)-captainkube

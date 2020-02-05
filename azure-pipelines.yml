@@ -65,26 +65,30 @@ stages:
       imagePullSecret: $(imagePullSecret)
       dockerRegistryServiceConnection: $(dockerRegistryServiceConnection)
       containerRegistry: $(containerRegistry)
-      tag: $(tag)
+      #tag: $(tag)
       environment: $(environment)
       namespace: $(namespace)
       services:
         - serviceName: parrot
           imageRepository: $(imageRepository)-parrot
           skip: false
-          ingress.enabled: false
+          #ingress.enabled: false
+          overrides: |
+            ingress.enabled:false
+            image.repository:$(containerRegistry)/$(imageRepository)-parrot
+            image.tag:$(tag)
         - serviceName: captainkube
           imageRepository: $(imageRepository)-captainkube
-          ingress.enabled: false
+          #ingress.enabled: false
           skip: false
         - serviceName: phippy
           imageRepository: $(imageRepository)-phippy
           skip: false
-          ingress.enabled: false 
+          #ingress.enabled: false 
         - serviceName: nodebrady
           imageRepository: $(imageRepository)-nodebrady
           skip: false
-          ingress.enabled: false 
+          #ingress.enabled: false 
 
           # - task: KubernetesManifest@0
           #   displayName: Create imagePullSecret

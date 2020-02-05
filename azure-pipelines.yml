@@ -159,7 +159,7 @@ stages:
               action: 'bake'
               namespace: '$(namespace)'
               helmChart: '$(Pipeline.Workspace)/phippycharts'
-              releaseName: 'phippy-website'
+              releaseName: 'phippy'
               overrides: |
                 ingress.enabled:false
                 image.repository:$(containerRegistry)/$(imageRepository)-phippy
@@ -178,7 +178,7 @@ stages:
               action: 'bake'
               namespace: '$(namespace)'
               helmChart: '$(Pipeline.Workspace)/captainkubecharts'
-              releaseName: 'captainkube-website'
+              releaseName: 'captainkube'
               overrides: |
                 ingress.enabled:false
                 image.repository:$(containerRegistry)/$(imageRepository)-captainkube

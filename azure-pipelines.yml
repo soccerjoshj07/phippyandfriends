@@ -38,13 +38,13 @@ stages:
       dockerRegistryServiceConnection: $(dockerRegistryServiceConnection)
       tag: $(tag)
       services:
-        - serviceName: captainkube
-          imageRepository: $(imageRepository)-captainkube
-          projectPath: captainkube
-          skip: false
         - serviceName: parrot
           imageRepository: $(imageRepository)-parrot
           projectPath: parrot
+          skip: false
+        - serviceName: captainkube
+          imageRepository: $(imageRepository)-captainkube
+          projectPath: captainkube
           skip: false
         - serviceName: phippy
           imageRepository: $(imageRepository)-phippy
@@ -69,14 +69,14 @@ stages:
       environment: $(environment)
       namespace: $(namespace)
       services:
-        - serviceName: captainkube
-          imageRepository: $(imageRepository)-captainkube
-          ingress.enabled: false
-          skip: false
         - serviceName: parrot
           imageRepository: $(imageRepository)-parrot
           skip: false
           ingress.enabled: false
+        - serviceName: captainkube
+          imageRepository: $(imageRepository)-captainkube
+          ingress.enabled: false
+          skip: false
         - serviceName: phippy
           imageRepository: $(imageRepository)-phippy
           skip: false

@@ -9,7 +9,7 @@ resources:
   repositories:
   - repository: templates
     name: soccerjoshj07/pipeline-templates
-    type: git
+    type: github
 
 variables:
 

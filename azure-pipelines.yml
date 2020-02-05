@@ -140,7 +140,7 @@ stages:
               action: 'bake'
               namespace: '$(namespace)'
               helmChart: '$(Pipeline.Workspace)/parrotcharts'
-              releaseName: '$(namespace)-website'
+              releaseName: 'parrot'
               overrides: |
                 ingress.enabled:false
                 image.repository:$(containerRegistry)/$(imageRepository)

@@ -142,7 +142,7 @@ stages:
               helmChart: '$(Pipeline.Workspace)/parrotcharts'
               releaseName: 'parrot'
               overrides: |
-                ingress.enabled:false
+                ingress.enabled:true
                 image.repository:$(containerRegistry)/$(imageRepository)
                 image.tag:$(tag)
             

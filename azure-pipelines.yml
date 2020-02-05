@@ -8,9 +8,8 @@ trigger:
 resources:
   repositories:
   - repository: templates
-    name: 'soccerjoshj07/pipeline-templates'
-    type: github
-    endpoint: soccerjoshj07
+    name: pipeline-templates
+    type: git
 
 variables:
 
@@ -88,7 +87,7 @@ stages:
   dependsOn: Build
 
   jobs:
-  - template: k8s/job-k8s-deploy.yml
+  - template: k8s/job-k8s-deploy.yml@templates
     parameters:
       imagePullSecret: $(imagePullSecret)
       dockerRegistryServiceConnection: $(dockerRegistryServiceConnection)

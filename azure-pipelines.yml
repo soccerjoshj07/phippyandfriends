@@ -6,21 +6,26 @@ trigger:
 - master
 
 resources:
-- repo: self
+  repositories:
+  - repository: templates
+    name: pipeline-templates
+    type: git
 
 variables:
 
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '7992c1c5-823d-4b44-a555-b54b9ecdad84'
+  dockerRegistryServiceConnection: 'aciphippyaksdemo-1187' # you have to create this endpoint in AzDO
   imageRepository: 'soccerjoshjphippyandfriends'
   containerRegistry: 'aciphippyaksdemo.azurecr.io'
   dockerfilePath: 'Dockerfile'
   tag: '$(Build.BuildNumber)'
   imagePullSecret: 'aciphippyaksdemo11879e66-auth'
+  environment: soccerjoshj07phippyandfriends.phippyandfriends
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
   
+
   # project
   projectName: parrot
   namespace: phippyandfriends
@@ -49,7 +54,7 @@ stages:
       displayName: Build and push an image to container registry
       inputs:
         command: buildAndPush
-        repository: $(imageRepository)
+        repository: $(imageRepository)-parrot
         dockerfile: $(projectName)/$(dockerfilePath)
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
@@ -69,28 +74,41 @@ stages:
       artifact: manifests
 
     - publish: captainkube/charts/captainkube
-      artifact: captainkubecharts
+      artifact: charts-captainkube
 
     - publish: $(projectName)/charts/$(projectName)
-      artifact: parrotcharts
+      artifact: charts-parrot
 
     - publish: phippy/charts/phippy
-      artifact: phippycharts
+      artifact: charts-phippy
 
 - stage: Deploy
   displayName: Deploy stage
   dependsOn: Build
 
   jobs:
-  - deployment: Deploy
-    displayName: Deploy
-    pool:
-      vmImage: $(vmImageName)
-    environment: 'soccerjoshj07phippyandfriends.phippyandfriends'
-    strategy:
-      runOnce:
-        deploy:
-          steps:
+  - template: k8s/job-k8s-build.yml
+    parameters:
+      imagePullSecret: $(imagePullSecret)
+      dockerRegistryServiceConnection: $(dockerRegistryServiceConnection)
+      containerRegistry: (containerRegistry)
+      imageRepository: $(imageRepository)
+      tag: $(tag)
+      environment: $(environment)
+      services:
+        - serviceName: captainkube
+          imageRepo: $(imageRepository)-captainkube
+          ingress.enabled: false
+          skip: false
+        - serviceName: parrot
+          imageRepo: $(imageRepository)-parrot
+          skip: false
+          ingress.enabled: false
+        - serviceName: phippy
+          imageRepo: $(imageRepository)-phippy
+          skip: false
+          ingress.enabled: false 
+
           # - task: KubernetesManifest@0
           #   displayName: Create imagePullSecret
           #   inputs:
@@ -133,59 +151,21 @@ stages:
           #     waitForExecution: false
 
           # Kubernetes bake and manifest deploy
-          - task: KubernetesManifest@0
-            displayName: Bake $(projectName) manifest
-            name: bake_${{ variables.projectName }}
-            inputs:
-              action: 'bake'
-              namespace: '$(namespace)'
-              helmChart: '$(Pipeline.Workspace)/parrotcharts'
-              releaseName: 'parrot'
-              overrides: |
-                ingress.enabled:false
-                image.repository:$(containerRegistry)/$(imageRepository)
-                image.tag:$(tag)
+          # - task: KubernetesManifest@0
+          #   displayName: Bake $(projectName) manifest
+          #   name: bake_${{ variables.projectName }}
+          #   inputs:
+          #     action: 'bake'
+          #     namespace: '$(namespace)'
+          #     helmChart: '$(Pipeline.Workspace)/parrotcharts'
+          #     releaseName: 'parrot'
+          #     overrides: |
+          #       ingress.enabled:false
+          #       image.repository:$(containerRegistry)/$(imageRepository)
+          #       image.tag:$(tag)
             
-          - task: KubernetesManifest@0
-            displayName: Deploy ${{ variables.projectName }} to k8s
-            inputs:
-              manifests: $(bake_${{ variables.projectName }}.manifestsBundle)
-              imagePullSecrets: $(imagePullSecret)
-
-          - task: KubernetesManifest@0
-            displayName: Bake phippy manifest
-            name: bake_phippy
-            inputs:
-              action: 'bake'
-              namespace: '$(namespace)'
-              helmChart: '$(Pipeline.Workspace)/phippycharts'
-              releaseName: 'phippy'
-              overrides: |
-                ingress.enabled:false
-                image.repository:$(containerRegistry)/$(imageRepository)-phippy
-                image.tag:$(tag)
-            
-          - task: KubernetesManifest@0
-            displayName: Deploy phippy to k8s
-            inputs:
-              manifests: $(bake_phippy.manifestsBundle)
-              imagePullSecrets: $(imagePullSecret)
-
-          - task: KubernetesManifest@0
-            displayName: Bake captainkube manifest
-            name: bake_captainkube
-            inputs:
-              action: 'bake'
-              namespace: '$(namespace)'
-              helmChart: '$(Pipeline.Workspace)/captainkubecharts'
-              releaseName: 'captainkube'
-              overrides: |
-                ingress.enabled:false
-                image.repository:$(containerRegistry)/$(imageRepository)-captainkube
-                image.tag:$(tag)
-            
-          - task: KubernetesManifest@0
-            displayName: Deploy captainkube to k8s
-            inputs:
-              manifests: $(bake_captainkube.manifestsBundle)
-              imagePullSecrets: $(imagePullSecret)
+          # - task: KubernetesManifest@0
+          #   displayName: Deploy ${{ variables.projectName }} to k8s
+          #   inputs:
+          #     manifests: $(bake_${{ variables.projectName }}.manifestsBundle)
+          #     imagePullSecrets: $(imagePullSecret)

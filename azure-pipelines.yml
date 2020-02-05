@@ -91,21 +91,20 @@ stages:
       imagePullSecret: $(imagePullSecret)
       dockerRegistryServiceConnection: $(dockerRegistryServiceConnection)
       containerRegistry: $(containerRegistry)
-      imageRepository: $(imageRepository)
       tag: $(tag)
       environment: $(environment)
       namespace: $(namespace)
       services:
         - serviceName: captainkube
-          imageRepo: $(imageRepository)-captainkube
+          imageRepository: $(imageRepository)-captainkube
           ingress.enabled: false
           skip: false
         - serviceName: parrot
-          imageRepo: $(imageRepository)-parrot
+          imageRepository: $(imageRepository)-parrot
           skip: false
           ingress.enabled: false
         - serviceName: phippy
-          imageRepo: $(imageRepository)-phippy
+          imageRepository: $(imageRepository)-phippy
           skip: false
           ingress.enabled: false 
 

@@ -8,7 +8,7 @@ trigger:
 resources:
   repositories:
   - repository: templates
-    name: pipeline-templates
+    name: PartsUnlimited/pipeline-templates
     type: git
 
 variables:

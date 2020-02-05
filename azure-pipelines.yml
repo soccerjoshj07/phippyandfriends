@@ -72,7 +72,7 @@ stages:
       artifact: captainkubecharts
 
     - publish: $(projectName)/charts/$(projectName)
-      artifact: charts
+      artifact: parrotcharts
 
     - publish: phippy/charts/phippy
       artifact: phippycharts
@@ -139,7 +139,7 @@ stages:
             inputs:
               action: 'bake'
               namespace: '$(namespace)'
-              helmChart: '$(Pipeline.Workspace)/charts'
+              helmChart: '$(Pipeline.Workspace)/parrotcharts'
               releaseName: '$(namespace)-website'
               overrides: |
                 ingress.enabled:false
@@ -177,7 +177,7 @@ stages:
             inputs:
               action: 'bake'
               namespace: '$(namespace)'
-              helmChart: '$(Pipeline.Workspace)/captainkube'
+              helmChart: '$(Pipeline.Workspace)/captainkubecharts'
               releaseName: 'captainkube-website'
               overrides: |
                 ingress.enabled:false

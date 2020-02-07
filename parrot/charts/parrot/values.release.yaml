@@ -1,0 +1,9 @@
+parrot:  
+  serviceBus__Url: "__serviceBusUrl"
+  serviceBus__Key: "__serviceBusKey"
+  database__ConnectionString: "__databaseConnectionString"
+  AppEnvironment__Name: "__appEnvironmentName"
+  extraSettingNotInSettingsFile: "__extraSettingNotInSettingsFile__"
+ingress:
+  enabled: true #this code doesn't run if you pass in false
+  basedomain: __basedomain__.eastus2.aksapp.io # replace with your own from the portal

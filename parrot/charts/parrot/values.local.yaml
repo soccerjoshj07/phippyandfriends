@@ -1,0 +1,11 @@
+# 1) You could either have the local values here and perhaps gitignore this file so each dvlp can have their own
+# 2) Or put your local values in the base values.yaml and use the values.release.yaml to inject at release time
+parrot:  
+  serviceBus__Url: "myServiceBus.servicebus.windows.net"
+  serviceBus__Key: "abcdefghijklmnopqrstuvwzyz"
+  database__ConnectionString: "myConnStrDev"
+  AppEnvironment__Name: "minikube"
+  extraSettingNotInSettingsFile: "extraValue"
+ingress:
+  enabled: true #this code doesn't run if you pass in false
+  basedomain: 4797c730d12144e5bdb0.eastus2.aksapp.io # replace with your own from the portal

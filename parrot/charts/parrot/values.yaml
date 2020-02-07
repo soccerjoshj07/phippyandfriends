@@ -8,3 +8,9 @@ service:
 ingress:
   enabled: true
   basedomain: 4797c730d12144e5bdb0.eastus2.aksapp.io # replace with your own from the portal
+# parrot: # You can add parrot app values here, too
+  # serviceBus__Url: "myServiceBus.servicebus.windows.net"
+  # serviceBus__Key: "abcdefghijklmnopqrstuvwzyz"
+  # database__ConnectionString: "myConnStrDev"
+  # AppEnvironment__Name: "local"
+  # extraSettingNotInSettingsFile: "extraValue"

@@ -12,5 +12,6 @@ ingress:
   # serviceBus__Url: "myServiceBus.servicebus.windows.net"
   # serviceBus__Key: "abcdefghijklmnopqrstuvwzyz"
   # database__ConnectionString: "myConnStrDev"
+  # database__Name: "localdb"
   # AppEnvironment__Name: "local"
   # extraSettingNotInSettingsFile: "extraValue"

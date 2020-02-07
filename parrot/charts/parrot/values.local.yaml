@@ -4,6 +4,7 @@ parrot:
   serviceBus__Url: "myServiceBus.servicebus.windows.net"
   serviceBus__Key: "abcdefghijklmnopqrstuvwzyz"
   database__ConnectionString: "myConnStrDev"
+  database__ConnectionString: "myMinikubeDb"
   AppEnvironment__Name: "minikube"
   extraSettingNotInSettingsFile: "extraValue"
 ingress:

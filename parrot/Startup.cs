@@ -21,6 +21,8 @@ namespace parrot
         {
             services.Configure<AppEnvironment>
                 (Configuration.GetSection("AppEnvironment"));
+            services.Configure<Database>
+                (Configuration.GetSection("Database"));
 
             services.AddControllersWithViews();
             services.AddSingleton(new DaemonHub());

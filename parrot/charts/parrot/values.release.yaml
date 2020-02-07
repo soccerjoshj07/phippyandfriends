@@ -2,6 +2,7 @@ parrot:
   serviceBus__Url: "__serviceBusUrl__"
   serviceBus__Key: "__serviceBusKey__"
   database__ConnectionString: "__databaseConnectionString__"
+  database__Name: "__databaseName__"
   AppEnvironment__Name: "__appEnvironmentName__"
   extraSettingNotInSettingsFile: "__extraSettingNotInSettingsFile__"
 ingress:

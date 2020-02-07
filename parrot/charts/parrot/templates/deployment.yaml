@@ -38,3 +38,5 @@ spec:
             value: {{ .Values.parrot.serviceBus__Key | quote }}
           - name: Database__ConnectionString
             value: {{ .Values.parrot.database__ConnectionString | quote }}
+          - name: Database__Name
+            value: {{ .Values.parrot.database__Name | quote }}

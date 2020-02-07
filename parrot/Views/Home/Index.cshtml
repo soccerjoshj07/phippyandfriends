@@ -1,4 +1,9 @@
-﻿@{
+﻿@using Microsoft.Extensions.Options;
+@using AspNetCoreInjectConfigurationRazor.Configuration;
+
+@inject IOptions<AppEnvironment> OptionsAppEnvironmentConfiguration
+
+@{
     ViewData["Title"] = "parrot";
 }
 
@@ -23,6 +28,9 @@
 {
   <div class="ui centered seven wide column">
     <h4 class="ui centered inverted header">Connection Status: <span id="connectionStatus">Idle</span></h4>
+      <ol>
+        Environment: @OptionsAppEnvironmentConfiguration.Value.Name
+      </ol>
   </div>
 }
 

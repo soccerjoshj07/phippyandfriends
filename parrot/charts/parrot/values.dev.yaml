@@ -1,0 +1,6 @@
+parrot:  
+  serviceBus__Url: "myServiceBus.servicebus.windows.net"
+  serviceBus__Key: "abcdefghijklmnopqrstuvwzyz"
+  database__ConnectionString: "myConnStrDev"
+  AppEnvironment__Name: "dvlp"
+  extraSettingNotInSettingsFile: "extraValue"

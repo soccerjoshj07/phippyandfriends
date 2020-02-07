@@ -30,3 +30,11 @@ spec:
         env:
           - name: ASPNETCORE_ENVIRONMENT
             value: Development
+          - name: AppEnvironment__Name
+            value: {{ .Values.parrot.AppEnvironment__Name | quote }}
+          - name: ServiceBus__Url
+            value: {{ .Values.parrot.serviceBus__Url | quote }}  
+          - name: ServiceBus__Key
+            value: {{ .Values.parrot.serviceBus__Key | quote }}
+          - name: Database__ConnectionString
+            value: {{ .Values.parrot.database__ConnectionString | quote }}

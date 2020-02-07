@@ -1,8 +1,8 @@
 parrot:  
-  serviceBus__Url: "__serviceBusUrl"
-  serviceBus__Key: "__serviceBusKey"
-  database__ConnectionString: "__databaseConnectionString"
-  AppEnvironment__Name: "__appEnvironmentName"
+  serviceBus__Url: "__serviceBusUrl__"
+  serviceBus__Key: "__serviceBusKey__"
+  database__ConnectionString: "__databaseConnectionString__"
+  AppEnvironment__Name: "__appEnvironmentName__"
   extraSettingNotInSettingsFile: "__extraSettingNotInSettingsFile__"
 ingress:
   enabled: true #this code doesn't run if you pass in false

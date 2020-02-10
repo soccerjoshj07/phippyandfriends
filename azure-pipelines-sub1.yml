@@ -1,0 +1,161 @@
+# Deploy to Azure Kubernetes Service
+# Build and push image to Azure Container Registry; Deploy to Azure Kubernetes Service
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- master
+
+resources:
+  repositories:
+  - repository: templates
+    name: pipeline-templates
+    type: git
+
+variables:
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: 'soccerjoshj07-aciphippydemo' # you have to create this endpoint in AzDO
+  imageRepository: 'phippyandfriends'
+  containerRegistry: 'aciphippydemo.azurecr.io'
+  dockerfilePath: 'Dockerfile'
+  tag: '$(Build.BuildNumber)'
+  imagePullSecret: 'aciphippyaksdemo11879e66-auth'
+  environment: soccerjoshj07sub-phippyaks.phippyandfriends
+  namespace: phippyandfriends
+  varGroup: phippyandfriends-dev-kv
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
+stages:
+- stage: Build
+  displayName: Build stage
+  jobs:  
+  - template: k8s/job-k8s-build.yml@templates
+    parameters:
+      dockerRegistryServiceConnection: $(dockerRegistryServiceConnection)
+      tag: $(tag)
+      services:
+        - serviceName: parrot
+          imageRepository: $(imageRepository)-parrot
+          projectPath: parrot
+          skip: false
+        - serviceName: captainkube
+          imageRepository: $(imageRepository)-captainkube
+          projectPath: captainkube
+          skip: false
+        - serviceName: phippy
+          imageRepository: $(imageRepository)-phippy
+          projectPath: phippy
+          skip: false
+        - serviceName: nodebrady
+          imageRepository: $(imageRepository)-nodebrady
+          projectPath: nodebrady
+          skip: false
+
+- stage: Deploy
+  displayName: Deploy stage
+  dependsOn: Build
+
+  jobs:
+  - template: k8s/job-k8s-deploy.yml@templates
+    parameters:
+      imagePullSecret: $(imagePullSecret)
+      dockerRegistryServiceConnection: $(dockerRegistryServiceConnection)
+      containerRegistry: $(containerRegistry)
+      #tag: $(tag)
+      environment: $(environment)
+      namespace: $(namespace)
+      varGroup: ${{ variables.varGroup }}
+      services:
+        - serviceName: parrot
+          imageRepository: $(imageRepository)-parrot
+          skip: false
+          #ingress.enabled: false
+          overrides: |
+            ingress.enabled:false
+            image.repository:$(containerRegistry)/$(imageRepository)-parrot
+            image.tag:$(tag)
+        - serviceName: captainkube
+          imageRepository: $(imageRepository)-captainkube
+          #ingress.enabled: false
+          skip: false
+          overrides: |
+            ingress.enabled:false
+            image.repository:$(containerRegistry)/$(imageRepository)-captainkube
+            image.tag:$(tag)
+        - serviceName: phippy
+          imageRepository: $(imageRepository)-phippy
+          skip: false
+          #ingress.enabled: false 
+          overrides: |
+            ingress.enabled:false
+            image.repository:$(containerRegistry)/$(imageRepository)-phippy
+            image.tag:$(tag)
+        - serviceName: nodebrady
+          imageRepository: $(imageRepository)-nodebrady
+          skip: false
+          #ingress.enabled: false 
+          overrides: |
+            ingress.enabled:false
+            image.repository:$(containerRegistry)/$(imageRepository)-nodebrady
+            image.tag:$(tag)
+
+          # - task: KubernetesManifest@0
+          #   displayName: Create imagePullSecret
+          #   inputs:
+          #     action: 'createSecret'
+          #     namespace: '$(namespace)'
+          #     secretType: 'dockerRegistry'
+          #     secretName: '$(imagePullSecret)'
+          #     dockerRegistryEndpoint: '$(dockerRegistryServiceConnection)'
+
+          # Out of the box kubernetes manifest deploy
+          # - task: KubernetesManifest@0
+          #    displayName: Deploy to Kubernetes cluster
+          #    inputs:
+          #      action: deploy
+          #      manifests: |
+          #        $(Pipeline.Workspace)/manifests/deployment.yml
+          #        $(Pipeline.Workspace)/manifests/service.yml
+          #      imagePullSecrets: |
+          #        $(imagePullSecret)
+          #      containers: |
+          #        $(containerRegistry)/$(imageRepository):$(tag)
+
+          # Helm Upgrade w/ helm 3.0.x
+          # - task: HelmInstaller@1
+          #  inputs:
+          #    helmVersionToInstall: 'latest'
+
+          # - task: HelmDeploy@0
+          #   inputs:
+          #     connectionType: 'Azure Resource Manager'
+          #     azureSubscription: 'Visual Studio Enterprise – MPN (93ddb8b3-ddb9-4d1c-ba59-421456e65538)'
+          #     azureResourceGroup: 'rg-phippyaks-demo2'
+          #     kubernetesCluster: 'aks-phippyaksdemo'
+          #     namespace: 'phippyandfriends'
+          #     command: 'upgrade'
+          #     chartType: 'FilePath'
+          #     chartPath: '$(Pipeline.Workspace)/charts'
+          #     releaseName: '$(namespace)-website'
+          #     overrideValues: 'ingress.enabled=false,image.repository=$(containerRegistry)/$(imageRepository),image.tag=$(tag)'
+          #     waitForExecution: false
+
+          # Kubernetes bake and manifest deploy
+          # - task: KubernetesManifest@0
+          #   displayName: Bake $(projectName) manifest
+          #   name: bake_${{ variables.projectName }}
+          #   inputs:
+          #     action: 'bake'
+          #     namespace: '$(namespace)'
+          #     helmChart: '$(Pipeline.Workspace)/parrotcharts'
+          #     releaseName: 'parrot'
+          #     overrides: |
+          #       ingress.enabled:false
+          #       image.repository:$(containerRegistry)/$(imageRepository)
+          #       image.tag:$(tag)
+            
+          # - task: KubernetesManifest@0
+          #   displayName: Deploy ${{ variables.projectName }} to k8s
+          #   inputs:
+          #     manifests: $(bake_${{ variables.projectName }}.manifestsBundle)
+          #     imagePullSecrets: $(imagePullSecret)

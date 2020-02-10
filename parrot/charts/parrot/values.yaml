@@ -2,6 +2,7 @@ replicaCount: 1
 image:
   useImagePullSecrets: false
   pullPolicy: Always
+  imagePullSecret: "foo"  # enter a value if you need a pull secret for your registry
 service:
   internalPort: 80
   externalPort: 80

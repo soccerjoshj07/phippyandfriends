@@ -61,7 +61,7 @@ stages:
   dependsOn: Build
 
   jobs:
-  - template: k8s/job-k8s-deploy.yml@templates
+  - template: k8s/job-k8s-deploy-helm.yml@templates
     parameters:
       imagePullSecret: $(imagePullSecret)
       dockerRegistryServiceConnection: $(dockerRegistryServiceConnection)
@@ -76,9 +76,10 @@ stages:
           skip: false
           #ingress.enabled: false
           overrides: |
-            ingress.enabled:false
+            ingress.enabled:true
             image.repository:$(containerRegistry)/$(imageRepository)-parrot
             image.tag:$(tag)
+            useImagePullSecrets=true
         - serviceName: captainkube
           imageRepository: $(imageRepository)-captainkube
           #ingress.enabled: false
@@ -87,6 +88,7 @@ stages:
             ingress.enabled:false
             image.repository:$(containerRegistry)/$(imageRepository)-captainkube
             image.tag:$(tag)
+            useImagePullSecrets=true
         - serviceName: phippy
           imageRepository: $(imageRepository)-phippy
           skip: false
@@ -95,6 +97,7 @@ stages:
             ingress.enabled:false
             image.repository:$(containerRegistry)/$(imageRepository)-phippy
             image.tag:$(tag)
+            useImagePullSecrets=true
         - serviceName: nodebrady
           imageRepository: $(imageRepository)-nodebrady
           skip: false
@@ -103,6 +106,7 @@ stages:
             ingress.enabled:false
             image.repository:$(containerRegistry)/$(imageRepository)-nodebrady
             image.tag:$(tag)
+            useImagePullSecrets=true
 
           # - task: KubernetesManifest@0
           #   displayName: Create imagePullSecret

@@ -1,3 +1,5 @@
+image: 
+  imagePullSecret: "__imagePullSecret__"
 phippy:  
   serviceBus__Url: "__serviceBusUrl__"
   serviceBus__Key: "__serviceBusKey__"

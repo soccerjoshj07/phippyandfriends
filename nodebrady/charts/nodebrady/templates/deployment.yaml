@@ -19,7 +19,7 @@ spec:
     spec:
 {{ if .Values.image.useImagePullSecrets }}
       imagePullSecrets:
-        - name: {{ .Chart.Name }}-acr-secret
+        - name: {{ .Values.image.pullSecretName }}
 {{ end }}
       containers:
       - name: {{ .Chart.Name }}

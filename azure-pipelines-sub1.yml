@@ -45,19 +45,19 @@ stages:
         - serviceName: parrot
           imageRepository: $(imageRepository)-parrot
           projectPath: parrot
-          skip: false
+          skip: true
         - serviceName: captainkube
           imageRepository: $(imageRepository)-captainkube
           projectPath: captainkube
-          skip: false
+          skip: true
         - serviceName: phippy
           imageRepository: $(imageRepository)-phippy
           projectPath: phippy
-          skip: false
+          skip: true
         - serviceName: nodebrady
           imageRepository: $(imageRepository)-nodebrady
           projectPath: nodebrady
-          skip: false
+          skip: true
 
 - stage: Deploy
   displayName: Deploy stage
@@ -79,38 +79,22 @@ stages:
           imageRepository: $(imageRepository)-parrot
           skip: false
           #ingress.enabled: false
-          overrides: |
-            ingress.enabled=true
-            image.repository=$(containerRegistry)/$(imageRepository)-captainkube
-            image.tag=$(tag)
-            useImagePullSecrets=true
+          overrides: ingress.enabled=true,image.repository=$(containerRegistry)/$(imageRepository)-captainkube.image.tag=latest,useImagePullSecrets=true
         - serviceName: captainkube
           imageRepository: $(imageRepository)-captainkube
           #ingress.enabled: false
           skip: false
-          overrides: |
-            ingress.enabled=false
-            image.repository=$(containerRegistry)/$(imageRepository)-captainkube
-            image.tag=$(tag)
-            useImagePullSecrets=true
+          overrides: ingress.enabled=false,image.repository=$(containerRegistry)/$(imageRepository)-captainkube.image.tag=latest,useImagePullSecrets=true
         - serviceName: phippy
           imageRepository: $(imageRepository)-phippy
           skip: false
           #ingress.enabled: false 
-          overrides: |
-            ingress.enabled=false
-            image.repository=$(containerRegistry)/$(imageRepository)-captainkube
-            image.tag=$(tag)
-            useImagePullSecrets=true
+          overrides: ingress.enabled=false,image.repository=$(containerRegistry)/$(imageRepository)-captainkube.image.tag=latest,useImagePullSecrets=true
         - serviceName: nodebrady
           imageRepository: $(imageRepository)-nodebrady
           skip: false
           #ingress.enabled: false 
-          overrides: |
-            ingress.enabled=false
-            image.repository=$(containerRegistry)/$(imageRepository)-captainkube
-            image.tag=$(tag)
-            useImagePullSecrets=true
+          overrides: ingress.enabled=false,image.repository=$(containerRegistry)/$(imageRepository)-captainkube.image.tag=latest,useImagePullSecrets=true
 
           # - task: KubernetesManifest@0
           #   displayName: Create imagePullSecret

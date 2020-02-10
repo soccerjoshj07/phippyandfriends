@@ -38,7 +38,9 @@ stages:
   - template: k8s/job-k8s-build.yml@templates
     parameters:
       dockerRegistryServiceConnection: $(dockerRegistryServiceConnection)
-      tag: $(tag)
+      tag: |
+        $(tag)
+        latest
       services:
         - serviceName: parrot
           imageRepository: $(imageRepository)-parrot
@@ -77,22 +79,38 @@ stages:
           imageRepository: $(imageRepository)-parrot
           skip: false
           #ingress.enabled: false
-          overrides: ingress.enabled:true,image.repository:$(containerRegistry)/$(imageRepository)-parrot,image.tag:$(tag),useImagePullSecrets:true
+          overrides: |
+            ingress.enabled=true
+            image.repository=$(containerRegistry)/$(imageRepository)-captainkube
+            image.tag=$(tag)
+            useImagePullSecrets=true
         - serviceName: captainkube
           imageRepository: $(imageRepository)-captainkube
           #ingress.enabled: false
           skip: false
-          overrides: ingress.enabled:false,image.repository:$(containerRegistry)/$(imageRepository)-parrot,image.tag:$(tag),useImagePullSecrets:true
+          overrides: |
+            ingress.enabled=false
+            image.repository=$(containerRegistry)/$(imageRepository)-captainkube
+            image.tag=$(tag)
+            useImagePullSecrets=true
         - serviceName: phippy
           imageRepository: $(imageRepository)-phippy
           skip: false
           #ingress.enabled: false 
-          overrides: ingress.enabled:false,image.repository:$(containerRegistry)/$(imageRepository)-parrot,image.tag:$(tag),useImagePullSecrets:true
+          overrides: |
+            ingress.enabled=false
+            image.repository=$(containerRegistry)/$(imageRepository)-captainkube
+            image.tag=$(tag)
+            useImagePullSecrets=true
         - serviceName: nodebrady
           imageRepository: $(imageRepository)-nodebrady
           skip: false
           #ingress.enabled: false 
-          overrides: ingress.enabled:false,image.repository:$(containerRegistry)/$(imageRepository)-parrot,image.tag:$(tag),useImagePullSecrets:true
+          overrides: |
+            ingress.enabled=false
+            image.repository=$(containerRegistry)/$(imageRepository)-captainkube
+            image.tag=$(tag)
+            useImagePullSecrets=true
 
           # - task: KubernetesManifest@0
           #   displayName: Create imagePullSecret

@@ -26,7 +26,7 @@ variables:
   imagePullSecret: 'aciphippyaksdemo11879e66-auth'
   environment: soccerjoshj07sub-phippyaks.phippyandfriends
   namespace: phippyandfriends
-  varGroup: phippyandfriends-dev-kv
+  varGroup: phippyandfriends-aks-sub1
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
@@ -70,7 +70,6 @@ stages:
       environment: $(environment)
       namespace: $(namespace)
       varGroup: ${{ variables.varGroup }}
-      basedomain: 09aef672d76a4d5cbc00
       services:
         - serviceName: parrot
           imageRepository: $(imageRepository)-parrot

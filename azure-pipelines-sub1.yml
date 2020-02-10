@@ -45,19 +45,19 @@ stages:
         - serviceName: parrot
           imageRepository: $(imageRepository)-parrot
           projectPath: parrot
-          skip: true
+          skip: false
         - serviceName: captainkube
           imageRepository: $(imageRepository)-captainkube
           projectPath: captainkube
-          skip: true
+          skip: false
         - serviceName: phippy
           imageRepository: $(imageRepository)-phippy
           projectPath: phippy
-          skip: true
+          skip: false
         - serviceName: nodebrady
           imageRepository: $(imageRepository)-nodebrady
           projectPath: nodebrady
-          skip: true
+          skip: false
 
 - stage: Deploy
   displayName: Deploy stage

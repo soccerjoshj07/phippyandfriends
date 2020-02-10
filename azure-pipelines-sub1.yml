@@ -24,7 +24,8 @@ variables:
   dockerfilePath: 'Dockerfile'
   tag: '$(Build.BuildNumber)'
   imagePullSecret: 'aciphippyaksdemo11879e66-auth'
-  environment: soccerjoshj07sub-phippyaks.phippyandfriends
+  environment: soccerjoshj07sub-phippyaks
+  kubernetesServiceConnection: soccerjoshj07-aksphippydemo
   namespace: phippyandfriends
   varGroup: phippyandfriends-aks-sub1
   # Agent VM image name
@@ -68,6 +69,7 @@ stages:
       containerRegistry: $(containerRegistry)
       #tag: $(tag)
       environment: $(environment)
+      kubernetesServiceConnection: $(kubernetesServiceConnection)
       namespace: $(namespace)
       varGroup: ${{ variables.varGroup }}
       services:

@@ -70,6 +70,7 @@ stages:
       environment: $(environment)
       namespace: $(namespace)
       varGroup: ${{ variables.varGroup }}
+      basedomain: 09aef672d76a4d5cbc00
       services:
         - serviceName: parrot
           imageRepository: $(imageRepository)-parrot

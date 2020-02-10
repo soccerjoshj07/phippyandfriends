@@ -79,6 +79,7 @@ stages:
             ingress.enabled:false
             image.repository:$(containerRegistry)/$(imageRepository)-parrot
             image.tag:$(tag)
+            parrot.AppEnvironment__Name:demo
         - serviceName: captainkube
           imageRepository: $(imageRepository)-captainkube
           #ingress.enabled: false

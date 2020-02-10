@@ -77,11 +77,10 @@ stages:
           imageRepository: $(imageRepository)-parrot
           skip: false
           #ingress.enabled: false
-          overrides: |
-            ingress.enabled:true
+          overrides: ingress.enabled:true
             image.repository:$(containerRegistry)/$(imageRepository)-parrot
             image.tag:$(tag)
-            useImagePullSecrets=true
+            useImagePullSecrets:true
         - serviceName: captainkube
           imageRepository: $(imageRepository)-captainkube
           #ingress.enabled: false
@@ -90,7 +89,7 @@ stages:
             ingress.enabled:false
             image.repository:$(containerRegistry)/$(imageRepository)-captainkube
             image.tag:$(tag)
-            useImagePullSecrets=true
+            useImagePullSecrets:true
         - serviceName: phippy
           imageRepository: $(imageRepository)-phippy
           skip: false
@@ -99,7 +98,7 @@ stages:
             ingress.enabled:false
             image.repository:$(containerRegistry)/$(imageRepository)-phippy
             image.tag:$(tag)
-            useImagePullSecrets=true
+            useImagePullSecrets:true
         - serviceName: nodebrady
           imageRepository: $(imageRepository)-nodebrady
           skip: false

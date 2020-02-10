@@ -24,7 +24,7 @@ variables:
   dockerfilePath: 'Dockerfile'
   tag: '$(Build.BuildNumber)'
   imagePullSecret: 'aciphippyaksdemo11879e66-auth'
-  environment: soccerjoshj07sub-phippyaks
+  environment: soccerjoshj07sub-phippyaks.phippyandfriends
   namespace: phippyandfriends
   varGroup: phippyandfriends-dev-kv
   # Agent VM image name

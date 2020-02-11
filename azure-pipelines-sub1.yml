@@ -77,7 +77,7 @@ stages:
           imageRepository: $(imageRepository)-parrot
           skip: false
           #ingress.enabled: false
-          overrides: ingress.enabled=false,image.repository=$(containerRegistry)/$(imageRepository)-captainkube,image.tag=$(tag),image.useImagePullSecrets=true
+          overrides: ingress.enabled=true,image.repository=$(containerRegistry)/$(imageRepository)-captainkube,image.tag=$(tag),image.useImagePullSecrets=true
         - serviceName: captainkube
           imageRepository: $(imageRepository)-captainkube
           #ingress.enabled: false

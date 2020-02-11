@@ -72,7 +72,7 @@ stages:
       appEnvironmentName: $(appEnvironmentName)
       databaseName: $(databaseName)
       dockerRegistryServiceConnection: $(dockerRegistryServiceConnection)
-      containerRegistry: $(containerRegistry)
+      #containerRegistry: $(containerRegistry)
       #tag: $(tag)
       environment: $(environment)
       kubernetesServiceConnection: $(kubernetesServiceConnection)

@@ -24,7 +24,6 @@ variables:
   dockerfilePath: 'Dockerfile'
   tag: '$(Build.BuildNumber)'
   imagePullSecret: 'aciphippyaksdemo11879e66-auth'
-  appEnvironmentName: Demo-Sub1
   environment: soccerjoshj07sub1-phippyandfriends.phippyandfriends
   kubernetesServiceConnection: soccerjoshj07sub1-phippyandfriends-aks-phippyaksdemo-sub1-phippyandfriends-1581430770201
   namespace: phippyandfriends
@@ -61,13 +60,17 @@ stages:
 - stage: Deploy
   displayName: Deploy stage
   dependsOn: Build
+  variables:
+    # Stage Variables to be used as environment tokens to be replaced
+    appEnvironmentName: Demo-Sub1
+    databaseName: demodb
 
   jobs:
   - template: k8s/job-k8s-deploy-helm.yml@templates
     parameters:
       imagePullSecret: $(imagePullSecret)
       appEnvironmentName: $(appEnvironmentName)
-      databaseName: demodb
+      databaseName: $(databaseName)
       dockerRegistryServiceConnection: $(dockerRegistryServiceConnection)
       containerRegistry: $(containerRegistry)
       #tag: $(tag)

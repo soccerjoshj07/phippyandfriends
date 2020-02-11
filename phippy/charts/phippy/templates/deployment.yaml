@@ -15,7 +15,7 @@ spec:
     spec:
 {{ if .Values.image.useImagePullSecrets }}
       imagePullSecrets:
-        - name: {{ .Values.image.pullSecret }}
+        - name: {{ .Values.image.imagePullSecret }}
 {{ end }}
       containers:
       - name: {{ .Chart.Name }}

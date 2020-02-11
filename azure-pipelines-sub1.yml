@@ -47,15 +47,15 @@ stages:
         - serviceName: captainkube
           imageRepository: $(imageRepository)-captainkube
           projectPath: captainkube
-          skip: false
+          skip: true
         - serviceName: phippy
           imageRepository: $(imageRepository)-phippy
           projectPath: phippy
-          skip: false
+          skip: true
         - serviceName: nodebrady
           imageRepository: $(imageRepository)-nodebrady
           projectPath: nodebrady
-          skip: false
+          skip: true
 
 - stage: Deploy
   displayName: Deploy stage

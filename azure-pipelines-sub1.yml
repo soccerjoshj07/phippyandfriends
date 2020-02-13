@@ -17,17 +17,18 @@ resources:
     type: git
 
 variables:
-  # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: 'soccerjoshj07-aciphippydemo' # you have to create this endpoint in AzDO
+  # Azure Container Registry variables
+  dockerRegistryServiceConnection: 'soccerjoshj07-aciphippydemo'
   imageRepository: 'phippyandfriends'
   containerRegistry: 'aciphippydemo.azurecr.io'
   dockerfilePath: 'Dockerfile'
   tag: '$(Build.BuildNumber)'
   imagePullSecret: 'aciphippyaksdemo11879e66-auth'
-  environment: soccerjoshj07sub1-phippyandfriends.phippyandfriends
+  environment: soccerjoshj07sub1-phippyandfriends.phippyandfriends # Environment in Azure DevOps, EnvName.namespace
   kubernetesServiceConnection: soccerjoshj07sub1-phippyandfriends-aks-phippyaksdemo-sub1-phippyandfriends-1581430770201
   namespace: phippyandfriends
   varGroup: phippyandfriends-aks-sub1
+
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
@@ -68,95 +69,33 @@ stages:
   jobs:
   - template: k8s/job-k8s-deploy-helm.yml@templates
     parameters:
-      imagePullSecret: $(imagePullSecret)
-      appEnvironmentName: $(appEnvironmentName)
-      databaseName: $(databaseName)
+      # Azure Container Registry variables
       dockerRegistryServiceConnection: $(dockerRegistryServiceConnection)
       #containerRegistry: $(containerRegistry)
       #tag: $(tag)
+      # Deployment variables
+      imagePullSecret: $(imagePullSecret)
       environment: $(environment)
       kubernetesServiceConnection: $(kubernetesServiceConnection)
       namespace: $(namespace)
+      # Environment-specific variables
       varGroup: ${{ variables.varGroup }}
+      appEnvironmentName: $(appEnvironmentName)
+      databaseName: $(databaseName)
       services:
         - serviceName: parrot
           imageRepository: $(imageRepository)-parrot
           skip: false
-          #ingress.enabled: false
           overrides: ingress.enabled=true,image.repository=$(containerRegistry)/$(imageRepository)-parrot,image.tag=$(tag),image.useImagePullSecrets=true
         - serviceName: captainkube
           imageRepository: $(imageRepository)-captainkube
-          #ingress.enabled: false
           skip: false
           overrides: ingress.enabled=false,image.repository=$(containerRegistry)/$(imageRepository)-captainkube,image.tag=$(tag),image.useImagePullSecrets=true
         - serviceName: phippy
           imageRepository: $(imageRepository)-phippy
           skip: false
-          #ingress.enabled: false 
           overrides: ingress.enabled=false,image.repository=$(containerRegistry)/$(imageRepository)-phippy,image.tag=$(tag),image.useImagePullSecrets=true
         - serviceName: nodebrady
           imageRepository: $(imageRepository)-nodebrady
           skip: false
-          #ingress.enabled: false 
           overrides: ingress.enabled=false,image.repository=$(containerRegistry)/$(imageRepository)-nodebrady,image.tag=$(tag),image.useImagePullSecrets=true
-
-          # - task: KubernetesManifest@0
-          #   displayName: Create imagePullSecret
-          #   inputs:
-          #     action: 'createSecret'
-          #     namespace: '$(namespace)'
-          #     secretType: 'dockerRegistry'
-          #     secretName: '$(imagePullSecret)'
-          #     dockerRegistryEndpoint: '$(dockerRegistryServiceConnection)'
-
-          # Out of the box kubernetes manifest deploy
-          # - task: KubernetesManifest@0
-          #    displayName: Deploy to Kubernetes cluster
-          #    inputs:
-          #      action: deploy
-          #      manifests: |
-          #        $(Pipeline.Workspace)/manifests/deployment.yml
-          #        $(Pipeline.Workspace)/manifests/service.yml
-          #      imagePullSecrets: |
-          #        $(imagePullSecret)
-          #      containers: |
-          #        $(containerRegistry)/$(imageRepository):$(tag)
-
-          # Helm Upgrade w/ helm 3.0.x
-          # - task: HelmInstaller@1
-          #  inputs:
-          #    helmVersionToInstall: 'latest'
-
-          # - task: HelmDeploy@0
-          #   inputs:
-          #     connectionType: 'Azure Resource Manager'
-          #     azureSubscription: 'Visual Studio Enterprise – MPN (93ddb8b3-ddb9-4d1c-ba59-421456e65538)'
-          #     azureResourceGroup: 'rg-phippyaks-demo2'
-          #     kubernetesCluster: 'aks-phippyaksdemo'
-          #     namespace: 'phippyandfriends'
-          #     command: 'upgrade'
-          #     chartType: 'FilePath'
-          #     chartPath: '$(Pipeline.Workspace)/charts'
-          #     releaseName: '$(namespace)-website'
-          #     overrideValues: 'ingress.enabled=false,image.repository=$(containerRegistry)/$(imageRepository),image.tag=$(tag)'
-          #     waitForExecution: false
-
-          # Kubernetes bake and manifest deploy
-          # - task: KubernetesManifest@0
-          #   displayName: Bake $(projectName) manifest
-          #   name: bake_${{ variables.projectName }}
-          #   inputs:
-          #     action: 'bake'
-          #     namespace: '$(namespace)'
-          #     helmChart: '$(Pipeline.Workspace)/parrotcharts'
-          #     releaseName: 'parrot'
-          #     overrides: |
-          #       ingress.enabled:false
-          #       image.repository:$(containerRegistry)/$(imageRepository)
-          #       image.tag:$(tag)
-            
-          # - task: KubernetesManifest@0
-          #   displayName: Deploy ${{ variables.projectName }} to k8s
-          #   inputs:
-          #     manifests: $(bake_${{ variables.projectName }}.manifestsBundle)
-          #     imagePullSecrets: $(imagePullSecret)

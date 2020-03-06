@@ -9,6 +9,7 @@ trigger:
   paths:
     exclude:
       - azure-pipelines-sub1.yml
+      - .github/*
 
 resources:
   repositories:

@@ -23,7 +23,7 @@ jobs:
     
     - name: Build the Docker image
       run: | 
-        docker build $image --file $image/Dockerfile --tag $image:$tag
+        docker build $image --file $image/Dockerfile --tag ${{ env.acrName}}.azurecr.io/$image:$tag
       
     - name: Azure Login
       uses: Azure/login@v1
@@ -36,6 +36,6 @@ jobs:
       with:
         inlineScript: | 
           az acr login --name ${{ env.acrName }}
-          docker push ${{ env.acrName}}.azurecr.io/$imageName:$tag
+          docker push ${{ env.acrName}}.azurecr.io/$image:$tag
     
 

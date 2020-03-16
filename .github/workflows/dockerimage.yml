@@ -23,6 +23,7 @@ jobs:
     
     - name: Build the Docker image
       run: | 
+        echo "${{ env.acrName}}.azurecr.io/$image:$tag"
         docker build $image --file $image/Dockerfile --tag ${{ env.acrName}}.azurecr.io/$image:$tag
       
     - name: Azure Login
@@ -31,12 +32,15 @@ jobs:
         # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
         creds: ${{ secrets.AZURE_SUBSCRIPTION }}
     
-    - name: Push the image to ACR
+    - name: Login to ACR
       uses: Azure/cli@v1.0.0
       with:
         inlineScript: | 
           az acr login --name ${{ env.acrName }} --expose-token
-          echo "${{ env.acrName}}.azurecr.io/$image:$tag"
-          docker push ${{ env.acrName}}.azurecr.io/$image:$tag
+          
+    - name: Push the image to ACR
+      run: |
+        echo "${{ env.acrName}}.azurecr.io/$image:$tag"
+        docker push ${{ env.acrName}}.azurecr.io/$image:$tag
     
 

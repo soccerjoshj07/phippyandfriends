@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       image: parrot
-      tag: 1.0.${{ env.GITHUB_RUN_NUMBER}}
+      tag: 1.0.${{ env.GITHUB_RUN_NUMBER }}
 
     steps:
     - uses: actions/checkout@v2

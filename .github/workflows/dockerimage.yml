@@ -26,7 +26,7 @@ jobs:
     
     - name: Build the Docker image
       run: | 
-        docker build ${{ matrix.image }} --file ${{ matrix.image }}/Dockerfile --tag ${{ env.acrName}}.azurecr.io/${{ matrix.imageName }}.app:${{ env.tag }}
+        docker build ${{ matrix.image }} --file ${{ matrix.image }}/Dockerfile --tag ${{ env.acrName}}.azurecr.io/${{ matrix.image }}.app:${{ env.tag }}
       
     - name: Azure Login
       uses: Azure/login@v1

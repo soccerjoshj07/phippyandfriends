@@ -6,9 +6,11 @@ on:
   pull_request:
     branches: [ master ]
 
+env:
+  acrName: phippyaksdemo
 jobs:
 
-  build:
+  buildParrot:
 
     runs-on: ubuntu-latest
     env:
@@ -16,5 +18,21 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    
     - name: Build the Docker image
-      run: docker build $image --file $image/Dockerfile --tag my-image-name:$(date +%s)
+      run: docker build $image --file $image/Dockerfile --tag $image:$(date +%s)
+      
+    - name: Azure Login
+      uses: Azure/login@v1
+      with:
+        # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
+        creds: ${{ secrets.AZURE_SUBSCRIPTION }}
+    
+    - name: Push the image to ACR
+      uses: Azure/cli@v1.0.0
+      with:
+        inlineScript: | 
+          az acr login --name ${{ env.acrName }}
+          docker push ${{ env.acrName}}.azurecr.io/$imageName:$(date +%s)
+    
+

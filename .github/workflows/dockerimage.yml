@@ -32,18 +32,18 @@ jobs:
         # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
         creds: ${{ secrets.AZURE_SUBSCRIPTION }}
     
-    - name: Obtain Authentication
+    - name: Setup Authentication
       uses: Azure/cli@v1.0.0
       with:
         inlineScript: | 
-          ACR_ACCESS_TOKEN=$(az acr login -n ${{ env.acrName }} --expose-token)
+          ACR_ACCESS_TOKEN=$(az acr login -n ${{ env.acrName }} --expose-token | jq '.accessToken' -r))
           echo "::add-mask::$ACR_ACCESS_TOKEN"
           echo "::set-env name=ACR_ACCESS_TOKEN::$ACR_ACCESS_TOKEN"
           
     - name: Push to ACR
       run: |
-        docker login ${{ env.acrName}}.azurecr.io -u 00000000-0000-0000-0000-000000000000 -p ${{ env.ACR_ACCESS_TOKEN }}
-        echo "${{ env.acrName}}.azurecr.io/$image:$tag"
+        echo ${{ env.ACR_ACCESS_TOKEN }}
+        docker login ${{ env.acrName}}.azurecr.io -u 00000000-0000-0000-0000-000000000000 --password-stdin
         docker push ${{ env.acrName}}.azurecr.io/${{ env.image }}:${{ env.tag }}
     
 

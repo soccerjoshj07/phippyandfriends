@@ -8,6 +8,7 @@ on:
 
 env:
   acrName: phippyaksdemo
+
 jobs:
 
   buildParrot:
@@ -15,12 +16,13 @@ jobs:
     runs-on: ubuntu-latest
     env:
       image: parrot
+      tag: $(date +%s)
 
     steps:
     - uses: actions/checkout@v2
     
     - name: Build the Docker image
-      run: docker build $image --file $image/Dockerfile --tag $image:$(date +%s)
+      run: docker build $image --file $image/Dockerfile --tag $image:$tag
       
     - name: Azure Login
       uses: Azure/login@v1
@@ -33,6 +35,6 @@ jobs:
       with:
         inlineScript: | 
           az acr login --name ${{ env.acrName }}
-          docker push ${{ env.acrName}}.azurecr.io/$imageName:$(date +%s)
+          docker push ${{ env.acrName}}.azurecr.io/$imageName:$tag
     
 

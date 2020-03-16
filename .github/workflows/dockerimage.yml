@@ -37,8 +37,7 @@ jobs:
       with:
         inlineScript: | 
           az acr login --name ${{ env.acrName }} --expose-token
-          echo "${{ env.acrName}}.azurecr.io/${{ image }}:${{ tag }}"
           echo "${{ env.acrName}}.azurecr.io/${{ env.image }}:${{ env.tag }}"
-          docker push ${{ env.acrName}}.azurecr.io/${{ image }}:${{ tag }}
+          docker push ${{ env.acrName}}.azurecr.io/${{ env.image }}:${{ env.tag }}
     
 

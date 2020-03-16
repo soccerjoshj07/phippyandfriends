@@ -16,7 +16,6 @@ jobs:
       fail-fast: false
       matrix:
         image: [parrot, captainkube, nodebrady, phippy]
-        imageName: [parrot, captainkube, nodebrady, phippy]
 
     runs-on: ubuntu-latest
     env:

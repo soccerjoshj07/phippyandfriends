@@ -28,6 +28,7 @@ jobs:
       run: | 
         echo ${{ env.test }}
         docker build ${{ env.test }} --file ${{ env.test }}/Dockerfile --tag ${{ env.acrName}}.azurecr.io/${{ env.test }}:${{ env.tag }}
+        echo "::set-env name=test::${{ env.test }}"
       env: 
         test: $(cut -d'.' -f2 <<<${{ matrix.image }})
       

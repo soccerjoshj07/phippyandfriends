@@ -26,8 +26,8 @@ jobs:
     
     - name: Build the Docker image
       run: | 
-        docker build ${{ matrix.image }} --file ${{ matrix.image }}/Dockerfile --tag ${{ env.acrName}}.azurecr.io/${{ matrix.image }}:${{ env.tag }}
         echo ${{ env.test }}
+        docker build ${{ matrix.image }} --file ${{ matrix.image }}/Dockerfile --tag ${{ env.acrName}}.azurecr.io/${{ matrix.image }}:${{ env.tag }}
       env: 
         test: $(cut -d'.' -f2 <<<$${{ matrix.image }})
       

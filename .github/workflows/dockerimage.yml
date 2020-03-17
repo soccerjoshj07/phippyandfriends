@@ -51,9 +51,9 @@ jobs:
       run: |
         echo ${{ env.ACR_ACCESS_TOKEN }} | docker login ${{ env.acrName}}.azurecr.io -u 00000000-0000-0000-0000-000000000000 --password-stdin
         array=( one two three )
-        for tags in {1.0.0 latest}; do
-            echo "heres the: $tags"
-            docker push ${{ env.acrName}}.azurecr.io/${{ env.test2 }}:$tags
+        for i in "${array[@]}"; do
+            echo "heres the: $i"
+            docker push ${{ env.acrName}}.azurecr.io/${{ env.test2 }}:$i
         done
         
     

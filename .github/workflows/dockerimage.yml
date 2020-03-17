@@ -27,9 +27,9 @@ jobs:
     - name: Build the Docker image
       run: | 
         echo ${{ env.test }}
-        docker build ${{ matrix.image }} --file ${{ matrix.image }}/Dockerfile --tag ${{ env.acrName}}.azurecr.io/${{ matrix.image }}:${{ env.tag }}
+        docker build ${{ env.test }} --file ${{ env.test }}/Dockerfile --tag ${{ env.acrName}}.azurecr.io/${{ env.test }}:${{ env.tag }}
       env: 
-        test: $(cut -d'.' -f2 <<<$${{ matrix.image }})
+        test: $(cut -d'.' -f2 <<<${{ matrix.image }})
       
     - name: Azure Login
       uses: Azure/login@v1

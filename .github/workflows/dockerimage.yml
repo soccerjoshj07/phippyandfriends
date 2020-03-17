@@ -28,7 +28,7 @@ jobs:
     - name: Build the Docker image
       run: | 
         echo ${{ env.test }}
-        docker build ${{ env.test2 }} --file ${{ env.test2 }}/Dockerfile --tag ${{ env.acrName}}.azurecr.io/${{ env.test2 }}:${{ env.tag }} --tag latest
+        docker build ${{ env.test2 }} --file ${{ env.test2 }}/Dockerfile --tag ${{ env.acrName}}.azurecr.io/${{ env.test2 }}:${{ env.tag }} --tag ${{ env.acrName}}.azurecr.io/${{ env.test2 }}:latest
         echo "::set-env name=test::${{ env.test }}"
       env: 
         test: $(cut -d'.' -f2 <<<${{ matrix.image }})

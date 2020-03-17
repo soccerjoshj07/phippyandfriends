@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image: [parrot, captainkube, nodebrady, phippy]
+        image: [app.parrot, app.captainkube, app.nodebrady, app.phippy]
 
     runs-on: ubuntu-latest
     env:
@@ -27,6 +27,9 @@ jobs:
     - name: Build the Docker image
       run: | 
         docker build ${{ matrix.image }} --file ${{ matrix.image }}/Dockerfile --tag ${{ env.acrName}}.azurecr.io/${{ matrix.image }}:${{ env.tag }}
+        echo ${{ env.test }}
+      env: 
+        test: $(cut -d'.' -f2 <<<$${{ matrix.image }})
       
     - name: Azure Login
       uses: Azure/login@v1

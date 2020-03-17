@@ -20,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       tag: 1.0.${{ github.run_number }}
+      test2: $(cut -d'.' -f2 <<<${{ matrix.image }} | tr "[:upper:]" "[:lower:]")
 
     steps:
     - uses: actions/checkout@v2
@@ -27,7 +28,7 @@ jobs:
     - name: Build the Docker image
       run: | 
         echo ${{ env.test }}
-        docker build ${{ env.test }} --file ${{ env.test }}/Dockerfile --tag ${{ env.acrName}}.azurecr.io/${{ env.test }}:${{ env.tag }}
+        docker build ${{ env.test2 }} --file ${{ env.test2 }}/Dockerfile --tag ${{ env.acrName}}.azurecr.io/${{ env.test2 }}:${{ env.tag }}
         echo "::set-env name=test::${{ env.test }}"
       env: 
         test: $(cut -d'.' -f2 <<<${{ matrix.image }})
@@ -49,6 +50,6 @@ jobs:
     - name: Push to ACR
       run: |
         echo ${{ env.ACR_ACCESS_TOKEN }} | docker login ${{ env.acrName}}.azurecr.io -u 00000000-0000-0000-0000-000000000000 --password-stdin
-        docker push ${{ env.acrName}}.azurecr.io/${{ env.test }}:${{ env.tag }}
+        docker push ${{ env.acrName}}.azurecr.io/${{ env.test2 }}:${{ env.tag }}
     
 

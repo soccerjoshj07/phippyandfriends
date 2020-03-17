@@ -48,6 +48,6 @@ jobs:
     - name: Push to ACR
       run: |
         echo ${{ env.ACR_ACCESS_TOKEN }} | docker login ${{ env.acrName}}.azurecr.io -u 00000000-0000-0000-0000-000000000000 --password-stdin
-        docker push ${{ env.acrName}}.azurecr.io/${{ matrix.image }}:${{ env.tag }}
+        docker push ${{ env.acrName}}.azurecr.io/${{ env.test }}:${{ env.tag }}
     
 

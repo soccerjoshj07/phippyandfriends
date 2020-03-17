@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       tag: 1.0.${{ github.run_number }}
-      test2: $(cut -d'.' -f2 <<<${{ matrix.image }} | tr "[:upper:]" "[:lower:]")
+      test2: $(cut -d'.' -f2 <<< ${{ matrix.image }} | tr "[:upper:]" "[:lower:]")
 
     steps:
     - uses: actions/checkout@v2

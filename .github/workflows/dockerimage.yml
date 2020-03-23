@@ -38,10 +38,10 @@ jobs:
             echo "$i"
         done
 
-        docker build --file Dockerfile --tag ${{ env.acrName}}.azurecr.io/${{ env.test2 }}:${{ env.tag }} ./
+        docker build --file ${{ env.test2 }}/Dockerfile --tag ${{ env.acrName}}.azurecr.io/${{ env.test2 }}:${{ env.tag }}
         echo "::set-env name=test::${{ env.test }}"
       env: 
-        test: $(cut -d'.' -f2 <<< ${{ matrix.image }})
+        test: $(cut -d'.' -f2 <<<${{ matrix.image }})
       
     - name: Azure Login
       uses: Azure/login@v1

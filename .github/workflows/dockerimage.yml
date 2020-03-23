@@ -42,7 +42,7 @@ jobs:
         echo "::set-env name=test::${{ env.test }}"
       env: 
         test: $(cut -d'.' -f2 <<<${{ matrix.image }})
-      working-directory: env.test2
+      working-directory: env.test
       
     - name: Azure Login
       uses: Azure/login@v1

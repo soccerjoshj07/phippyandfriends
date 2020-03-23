@@ -35,7 +35,7 @@ jobs:
         
         for i in $(echo ${{ env.tags }} | sed "s/,/ /g")
         do
-            tag+="--tag $i
+            tag+="--tag $i"
         done
 
         dockerBuildCmd+="$tag ./"

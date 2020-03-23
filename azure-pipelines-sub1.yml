@@ -68,7 +68,7 @@ stages:
     databaseName: demodb
 
   jobs:
-  - template: k8s/job-k8s-deploy.yml
+  - template: k8s/job-k8s-deploy.yml@templates
     parameters:
       imagePullSecret: $(imagePullSecret)
       dockerRegistryServiceConnection: $(dockerRegistryServiceConnection)

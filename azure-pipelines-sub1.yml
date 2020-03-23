@@ -75,6 +75,7 @@ stages:
       containerRegistry: (containerRegistry)
       imageRepository: $(imageRepository)
       tag: $(tag)
+      environment: $(environment)
       namespace: $(namespace)
       varGroup: ${{ variables.varGroup }}
       services:

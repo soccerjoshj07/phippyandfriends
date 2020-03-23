@@ -68,35 +68,25 @@ stages:
     databaseName: demodb
 
   jobs:
-  - template: k8s/job-k8s-deploy-helm.yml@templates
+  - template: k8s/job-k8s-deploy.yml
     parameters:
-      # Azure Container Registry variables
-      dockerRegistryServiceConnection: $(dockerRegistryServiceConnection)
-      #containerRegistry: $(containerRegistry)
-      #tag: $(tag)
-      # Deployment variables
       imagePullSecret: $(imagePullSecret)
-      environment: $(environment)
-      kubernetesServiceConnection: $(kubernetesServiceConnection)
+      dockerRegistryServiceConnection: $(dockerRegistryServiceConnection)
+      containerRegistry: (containerRegistry)
+      imageRepository: $(imageRepository)
+      tag: $(tag)
       namespace: $(namespace)
-      # Environment-specific variables
       varGroup: ${{ variables.varGroup }}
-      appEnvironmentName: $(appEnvironmentName)
-      databaseName: $(databaseName)
       services:
-        - serviceName: parrot
-          imageRepository: $(imageRepository)-parrot
-          skip: false
-          overrides: ingress.enabled=true,image.repository=$(containerRegistry)/$(imageRepository)-parrot,image.tag=$(tag),image.useImagePullSecrets=true
         - serviceName: captainkube
-          imageRepository: $(imageRepository)-captainkube
+          imageRepo: $(imageRepository)-captainkube
+          ingress.enabled: false
           skip: false
-          overrides: ingress.enabled=false,image.repository=$(containerRegistry)/$(imageRepository)-captainkube,image.tag=$(tag),image.useImagePullSecrets=true
+        - serviceName: parrot
+          imageRepo: $(imageRepository)-parrot
+          skip: false
+          ingress.enabled: false
         - serviceName: phippy
-          imageRepository: $(imageRepository)-phippy
+          imageRepo: $(imageRepository)-phippy
           skip: false
-          overrides: ingress.enabled=false,image.repository=$(containerRegistry)/$(imageRepository)-phippy,image.tag=$(tag),image.useImagePullSecrets=true
-        - serviceName: nodebrady
-          imageRepository: $(imageRepository)-nodebrady
-          skip: false
-          overrides: ingress.enabled=false,image.repository=$(containerRegistry)/$(imageRepository)-nodebrady,image.tag=$(tag),image.useImagePullSecrets=true
+          ingress.enabled: false 

@@ -31,14 +31,14 @@ jobs:
         set -euxo pipefail
         echo ${{ env.test }}
 
-        dockerBuildCmd=
+        #dockerBuildCmd=
         for i in $(echo ${{ env.tags }} | sed "s/,/ /g")
         do
             # call your procedure/other scripts here below
             echo "$i"
         done
 
-        docker build --file ${{ env.test2 }}/Dockerfile --tag ${{ env.acrName}}.azurecr.io/${{ env.test2 }}:${{ env.tag }}
+        docker build --file ${{ env.test2 }}/Dockerfile --tag ${{ env.acrName}}.azurecr.io/${{ env.test2 }}:${{ env.tag }} ./
         echo "::set-env name=test::${{ env.test }}"
       env: 
         test: $(cut -d'.' -f2 <<<${{ matrix.image }})

@@ -35,7 +35,7 @@ jobs:
         
         for i in $(echo ${{ env.tags }} | sed "s/,/ /g")
         do
-            tag+="--tag {{ env.acrName}}.azurecr.io/${{ env.test2 }}:$i "
+            tag+="--tag ${{ env.acrName}}.azurecr.io/${{ env.test2 }}:$i "
         done
 
         dockerBuildCmd+="$tag${{ env.test2 }}"

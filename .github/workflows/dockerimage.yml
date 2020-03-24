@@ -55,7 +55,6 @@ jobs:
       uses: Azure/cli@v1.0.0
       with:
         inlineScript: | 
-          set -euxo pipefail
           ACR_ACCESS_TOKEN=$(az acr login -n ${{ env.acrName }} --expose-token | jq '.accessToken' -r)
           echo "::add-mask::$ACR_ACCESS_TOKEN"
           echo "::set-env name=ACR_ACCESS_TOKEN::$ACR_ACCESS_TOKEN"

@@ -33,8 +33,7 @@ jobs:
 
         dockerBuildCmd="docker build --file ${{ env.test2 }}/Dockerfile"
         
-        for i in $(echo ${{ env.tags }} | sed "s/,/ /g")
-        do
+        for i in $(echo ${{ env.tags }} | sed "s/,/ /g"); do
             tag+="--tag ${{ env.acrName}}.azurecr.io/${{ env.test2 }}:$i "
         done
 
@@ -71,8 +70,7 @@ jobs:
         #     docker push ${{ env.acrName}}.azurecr.io/${{ env.test2 }}:$i
         # done
         
-        for i in $(echo ${{ env.tags }} | sed "s/,/ /g")
-        do
+        for i in $(echo ${{ env.tags }} | sed "s/,/ /g"); do
             docker push ${{ env.acrName}}.azurecr.io/${{ env.test2 }}:$i
         done
     

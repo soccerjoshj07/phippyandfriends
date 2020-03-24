@@ -31,14 +31,14 @@ jobs:
         set -euxo pipefail
         echo ${{ env.test }}
 
-        dockerBuildCmd="docker build --file ${{ env.test2 }}/Dockerfile "
+        dockerBuildCmd="docker build --file ${{ env.test2 }}/Dockerfile"
         
         for i in $(echo ${{ env.tags }} | sed "s/,/ /g")
         do
             tag+="--tag ${{ env.acrName}}.azurecr.io/${{ env.test2 }}:$i "
         done
 
-        dockerBuildCmd+="$tag${{ env.test2 }}"
+        dockerBuildCmd+=" $tag${{ env.test2 }}"
         eval $dockerBuildCmd
 
         #docker build --file ${{ env.test2 }}/Dockerfile --tag ${{ env.acrName}}.azurecr.io/${{ env.test2 }}:${{ env.tag }} ${{ env.test2 }}

@@ -31,7 +31,7 @@ jobs:
         set -euxo pipefail
         echo ${{ env.test }}
 
-        dockerBuildCmd="docker build --file ${{ env.test2 }}/Dockerfile"
+        dockerBuildCmd="docker build --file ${{ env.test2 }}/Dockerfile "
         
         for i in $(echo ${{ env.tags }} | sed "s/,/ /g")
         do

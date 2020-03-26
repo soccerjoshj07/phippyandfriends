@@ -1,0 +1,79 @@
+name: Deploy
+
+on: ['deployment']
+
+env:
+  acrName: phippyaksdemo
+
+jobs:
+
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        image: [app.parrot, app.captainkube, app.nodebrady, app.phippy]
+
+    runs-on: ubuntu-latest
+    env:
+      #tag: 1.0.${{ github.run_number }}
+      test2: $(cut -d'.' -f2 <<< ${{ matrix.image }} | tr "[:upper:]" "[:lower:]")
+      tags: 1.0.${{ github.run_number }}, ${{ github.sha }}, latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    # - name: Build the Docker image
+    #   run: | 
+    #     set -euxo pipefail
+    #     echo ${{ env.test }}
+
+    #     dockerBuildCmd="docker build --file ${{ env.test2 }}/Dockerfile"
+        
+    #     for i in $(echo ${{ env.tags }} | sed "s/,/ /g"); do
+    #         tag+="--tag ${{ env.acrName}}.azurecr.io/${{ env.test2 }}:$i "
+    #     done
+
+    #     dockerBuildCmd+=" $tag ${{ env.test2 }}"
+    #     eval $dockerBuildCmd
+
+    #     #docker build --file ${{ env.test2 }}/Dockerfile --tag ${{ env.acrName}}.azurecr.io/${{ env.test2 }}:${{ env.tag }} ${{ env.test2 }}
+    #     echo "::set-env name=test::${{ env.test }}"
+    #   env: 
+    #     test: $(cut -d'.' -f2 <<<${{ matrix.image }})
+      
+    - name: Azure Login
+      uses: Azure/login@v1
+      with:
+        # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
+        creds: ${{ secrets.AZURE_SUBSCRIPTION }}
+    
+    - name: Setup Authentication
+      uses: Azure/cli@v1.0.0
+      with:
+        inlineScript: | 
+          ACR_ACCESS_TOKEN=$(az acr login -n ${{ env.acrName }} --expose-token | jq '.accessToken' -r)
+          echo "::add-mask::$ACR_ACCESS_TOKEN"
+          echo "::set-env name=ACR_ACCESS_TOKEN::$ACR_ACCESS_TOKEN"
+          
+    # do your deployment here, using whatever tooling you like:
+
+    - name: 'Deploy ${{ github.event.deployment.environment }}'
+      run: |
+        echo "task - ${{ github.event.deployment.task }}"
+        echo "environment - ${{ github.event.deployment.environment }}"
+        echo "payload - ${{ toJson(github.event.deployment.payload) }}"
+
+    - name: 'deployment success'
+      if: success()
+      uses: 'deliverybot/status@master'
+      with:
+        state: 'success'
+        token: '${{ secrets.GITHUB_TOKEN }}'
+
+    - name: 'deployment failure'
+      if: failure()
+      uses: 'deliverybot/status@master'
+      with:
+        state: 'failure'
+        token: '${{ secrets.GITHUB_TOKEN }}' 
+

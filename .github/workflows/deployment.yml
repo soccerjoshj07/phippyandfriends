@@ -41,19 +41,19 @@ jobs:
     #   env: 
     #     test: $(cut -d'.' -f2 <<<${{ matrix.image }})
       
-    - name: Azure Login
-      uses: Azure/login@v1
-      with:
-        # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
-        creds: ${{ secrets.AZURE_SUBSCRIPTION }}
+    # - name: Azure Login
+    #   uses: Azure/login@v1
+    #   with:
+    #     # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
+    #     creds: ${{ secrets.AZURE_SUBSCRIPTION }}
     
-    - name: Setup Authentication
-      uses: Azure/cli@v1.0.0
-      with:
-        inlineScript: | 
-          ACR_ACCESS_TOKEN=$(az acr login -n ${{ env.acrName }} --expose-token | jq '.accessToken' -r)
-          echo "::add-mask::$ACR_ACCESS_TOKEN"
-          echo "::set-env name=ACR_ACCESS_TOKEN::$ACR_ACCESS_TOKEN"
+    # - name: Setup Authentication
+    #   uses: Azure/cli@v1.0.0
+    #   with:
+    #     inlineScript: | 
+    #       ACR_ACCESS_TOKEN=$(az acr login -n ${{ env.acrName }} --expose-token | jq '.accessToken' -r)
+    #       echo "::add-mask::$ACR_ACCESS_TOKEN"
+    #       echo "::set-env name=ACR_ACCESS_TOKEN::$ACR_ACCESS_TOKEN"
           
     # do your deployment here, using whatever tooling you like:
 
@@ -62,6 +62,16 @@ jobs:
       with:
         # Version of helm
         version: v2.16.5
+
+    - name: Azure Kubernetes set context
+      uses: Azure/aks-set-context@v1
+      with:
+        # Azure credentials i.e. output of `az ad sp create-for-rbac --sdk-auth`
+        creds: ${{ secrets.AZURE_SUBSCRIPTION }}
+        # Resource Group Name
+        resource-group: rg-phippyaks-demo
+        # AKS Cluster Name
+        cluster-name: aks-phippyaksdemo-sub1
 
     - name: 'Deploy ${{ github.event.deployment.environment }}'
       run: |

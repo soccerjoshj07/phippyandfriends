@@ -61,7 +61,7 @@ jobs:
       uses: Azure/setup-helm@v1
       with:
         # Version of helm
-        version: 2.16.1
+        version: 2.16.5
 
     - name: 'Deploy ${{ github.event.deployment.environment }}'
       run: |

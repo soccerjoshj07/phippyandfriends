@@ -45,7 +45,7 @@ jobs:
     #   uses: Azure/login@v1
     #   with:
     #     # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
-    #     creds: ${{ secrets.AZURE_SUBSCRIPTION }}
+    #     creds: ${{ secrets.AZURE_SUBSCRIPTION_SUB1 }}
     
     # - name: Setup Authentication
     #   uses: Azure/cli@v1.0.0
@@ -67,7 +67,7 @@ jobs:
       uses: Azure/aks-set-context@v1
       with:
         # Azure credentials i.e. output of `az ad sp create-for-rbac --sdk-auth`
-        creds: ${{ secrets.AZURE_SUBSCRIPTION }}
+        creds: ${{ secrets.AZURE_SUBSCRIPTION_SUB1 }}
         # Resource Group Name
         resource-group: rg-phippyaks-demo
         # AKS Cluster Name

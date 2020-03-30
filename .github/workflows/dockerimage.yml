@@ -25,10 +25,18 @@ jobs:
       #tag: 1.0.${{ github.run_number }}
       test2: $(cut -d'.' -f2 <<< ${{ matrix.image }} | tr "[:upper:]" "[:lower:]")
       tags: 1.0.${{ github.run_number }}, ${{ github.sha }}, latest
+      var1: Test1
+      var2: test2
+      var3: ${{ env.var1}}.${{ env.var2}}
+
 
     steps:
     - uses: actions/checkout@v2
     
+    - name: test echo
+      run: |
+        echo ${{ env.var3}}
+        
     - name: Build the Docker image
       run: | 
         set -euxo pipefail

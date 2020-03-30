@@ -94,7 +94,7 @@ jobs:
         image: [app.parrot, app.captainkube, app.nodebrady, app.phippy]
 
     runs-on: ubuntu-latest
-    needs: [build-parrot]
+    needs: [build-app.phippy]
     env:
       #tag: 1.0.${{ github.run_number }}
       test2: $(cut -d'.' -f2 <<< ${{ matrix.image }} | tr "[:upper:]" "[:lower:]")

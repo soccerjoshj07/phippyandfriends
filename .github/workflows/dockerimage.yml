@@ -27,7 +27,7 @@ jobs:
       tags: 1.0.${{ github.run_number }}, ${{ github.sha }}, latest
       var1: Test1
       var2: test2
-      var3: $test1 . $test2
+      var3: '$test1 . $test2'
 
 
     steps:

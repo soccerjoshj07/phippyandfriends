@@ -86,5 +86,27 @@ jobs:
         for i in $(echo ${{ env.tags }} | sed "s/,/ /g"); do
             docker push ${{ env.acrName}}.azurecr.io/${{ env.test2 }}:$i
         done
-    
 
+  deploy:
+    strategy:
+      fail-fast: false
+      matrix:
+        image: [app.parrot, app.captainkube, app.nodebrady, app.phippy]
+
+    runs-on: ubuntu-latest
+    needs: [build-parrot]
+    env:
+      #tag: 1.0.${{ github.run_number }}
+      test2: $(cut -d'.' -f2 <<< ${{ matrix.image }} | tr "[:upper:]" "[:lower:]")
+      tags: 1.0.${{ github.run_number }}, ${{ github.sha }}, latest
+      var1: Test1
+      var2: test2
+      var3: $var1 . $var2
+
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: test echo
+      run: |
+        echo ${{ env.var3 }}

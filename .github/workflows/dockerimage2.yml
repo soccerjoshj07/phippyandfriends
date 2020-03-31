@@ -94,7 +94,7 @@ jobs:
         image: [app.parrot, app.captainkube, app.nodebrady, app.phippy]
 
     runs-on: ubuntu-latest
-    needs: [image-phippy]
+    needs: [build]
     name: $var1
     env:
       #tag: 1.0.${{ github.run_number }}
